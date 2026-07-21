@@ -1,0 +1,30 @@
+# secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+
+# node
+node_modules/
+dist/
+.output/
+.nuxt/
+.vercel/
+
+# python agent
+agent/.venv*/
+agent/venv/
+__pycache__/
+*.pyc
+agent/eval_outputs/
+agent/eval_log.jsonl
+
+# local data / exports
+*.db
+exports/
+study_export_*.csv
+
+# os / editor
+.DS_Store
+.vscode/
+.elasticbeanstalk/

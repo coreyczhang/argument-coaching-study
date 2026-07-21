@@ -1,0 +1,139 @@
+[
+  {
+    "id": "cp_001",
+    "label": "empty_board_plus_opens",
+    "topic": "Should schools ban phones in class?",
+    "ai_role": "plus",
+    "game_board": {
+      "0": {
+        "tileId": "0",
+        "text": "Should schools ban phones in class?",
+        "confirmed": true
+      }
+    },
+    "expected": {
+      "parent_id": "0",
+      "text_max_chars": 100,
+      "text_non_empty": true,
+      "strategy_valid": true
+    }
+  },
+  {
+    "id": "cp_002",
+    "label": "rebut_opponent_minus_tile",
+    "topic": "Should schools ban phones in class?",
+    "ai_role": "plus",
+    "game_board": {
+      "0": {
+        "tileId": "0",
+        "text": "Should schools ban phones in class?",
+        "confirmed": true
+      },
+      "t1": {
+        "tileId": "t1",
+        "player": "minus",
+        "text": "Phones help students look up information quickly.",
+        "parentId": "0",
+        "confirmed": true
+      }
+    },
+    "expected": {
+      "parent_id": "t1",
+      "text_max_chars": 100,
+      "text_non_empty": true,
+      "strategy_valid": true,
+      "preferred_strategy": "rebut_opponent"
+    }
+  },
+  {
+    "id": "cp_003",
+    "label": "minus_role_rebuts_plus",
+    "topic": "Universal basic income should be implemented nationwide.",
+    "ai_role": "minus",
+    "game_board": {
+      "0": {
+        "tileId": "0",
+        "text": "Universal basic income should be implemented nationwide.",
+        "confirmed": true
+      },
+      "t1": {
+        "tileId": "t1",
+        "player": "plus",
+        "text": "UBI reduces poverty and gives people financial security.",
+        "parentId": "0",
+        "confirmed": true
+      }
+    },
+    "expected": {
+      "parent_id": "t1",
+      "text_max_chars": 100,
+      "text_non_empty": true,
+      "strategy_valid": true,
+      "preferred_strategy": "rebut_opponent"
+    }
+  },
+  {
+    "id": "cp_004",
+    "label": "multi_tile_board_targets_strongest",
+    "topic": "Social media does more harm than good.",
+    "ai_role": "minus",
+    "game_board": {
+      "0": {
+        "tileId": "0",
+        "text": "Social media does more harm than good.",
+        "confirmed": true
+      },
+      "t1": {
+        "tileId": "t1",
+        "player": "plus",
+        "text": "Social media spreads misinformation rapidly.",
+        "parentId": "0",
+        "confirmed": true
+      },
+      "t2": {
+        "tileId": "t2",
+        "player": "plus",
+        "text": "It causes anxiety and depression in teens.",
+        "parentId": "0",
+        "confirmed": true
+      },
+      "t3": {
+        "tileId": "t3",
+        "player": "minus",
+        "text": "Social media connects people across the world.",
+        "parentId": "0",
+        "confirmed": true
+      }
+    },
+    "expected": {
+      "text_max_chars": 100,
+      "text_non_empty": true,
+      "strategy_valid": true
+    }
+  },
+  {
+    "id": "cp_005",
+    "label": "text_within_char_limit",
+    "topic": "Remote work should be the default for office jobs.",
+    "ai_role": "plus",
+    "game_board": {
+      "0": {
+        "tileId": "0",
+        "text": "Remote work should be the default for office jobs.",
+        "confirmed": true
+      },
+      "t1": {
+        "tileId": "t1",
+        "player": "minus",
+        "text": "Remote work hurts collaboration and team culture.",
+        "parentId": "0",
+        "confirmed": true
+      }
+    },
+    "expected": {
+      "text_max_chars": 100,
+      "text_non_empty": true,
+      "strategy_valid": true
+    }
+  }
+]

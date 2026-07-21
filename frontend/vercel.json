@@ -1,0 +1,6 @@
+{
+  "buildCommand": "npm run generate",
+  "outputDirectory": ".output/public",
+  "redirects": [{ "source": "/", "destination": "/demo", "permanent": false }],
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+}

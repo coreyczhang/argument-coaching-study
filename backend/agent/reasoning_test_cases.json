@@ -1,0 +1,191 @@
+[
+  {
+    "id": "og_001",
+    "category": "explicit_overgeneralization",
+    "topic": "Should social media use be restricted in schools?",
+    "parent_text": "Schools should allow students to use social media during free periods.",
+    "tile_text": "Most teenagers are addicted to social media.",
+    "structure": { "relationship": "REBUTS" },
+    "expected": { "overgeneralization": true, "false_causation": false }
+  },
+  {
+    "id": "og_002",
+    "category": "explicit_overgeneralization",
+    "topic": "Should violent video games be regulated?",
+    "parent_text": "Violent video games are harmless entertainment.",
+    "tile_text": "Everyone who plays violent games becomes aggressive.",
+    "structure": { "relationship": "REBUTS" },
+    "expected": { "overgeneralization": true, "false_causation": false }
+  },
+  {
+    "id": "og_003",
+    "category": "explicit_overgeneralization",
+    "topic": "Should homework be reduced?",
+    "parent_text": "Homework helps students learn discipline.",
+    "tile_text": "All students hate homework and learn nothing from it.",
+    "structure": { "relationship": "REBUTS" },
+    "expected": { "overgeneralization": true, "false_causation": false }
+  },
+  {
+    "id": "fc_001",
+    "category": "false_causation",
+    "topic": "Should schools ban phones in class?",
+    "parent_text": "Phone bans make classrooms more focused.",
+    "tile_text": "Phone bans improved grades, so the bans caused the improvement.",
+    "structure": { "relationship": "SUPPORTS" },
+    "expected": { "overgeneralization": false, "false_causation": true }
+  },
+  {
+    "id": "fc_002",
+    "category": "false_causation",
+    "topic": "Is social media harmful to teenagers?",
+    "parent_text": "Teen mental health has declined in recent years.",
+    "tile_text": "Social media causes depression because teens use it a lot and depression is rising.",
+    "structure": { "relationship": "SUPPORTS" },
+    "expected": { "overgeneralization": false, "false_causation": true }
+  },
+  {
+    "id": "fc_003",
+    "category": "false_causation",
+    "topic": "Should city parks receive more funding?",
+    "parent_text": "Parks are good for community life.",
+    "tile_text": "Crime fell after the new park opened, so the park caused the drop in crime.",
+    "structure": { "relationship": "SUPPORTS" },
+    "expected": { "overgeneralization": false, "false_causation": true }
+  },
+  {
+    "id": "neg_001",
+    "category": "short_opinion",
+    "topic": "Should schools require uniforms?",
+    "parent_text": "Uniforms improve discipline.",
+    "tile_text": "I think uniforms are a bad idea.",
+    "structure": { "relationship": "REBUTS" },
+    "expected": { "overgeneralization": false, "false_causation": false }
+  },
+  {
+    "id": "neg_002",
+    "category": "vague_claim",
+    "topic": "Should schools ban phones in class?",
+    "parent_text": "Phone bans help students pay attention.",
+    "tile_text": "Phones can be distracting.",
+    "structure": { "relationship": "REBUTS" },
+    "expected": { "overgeneralization": false, "false_causation": false }
+  },
+  {
+    "id": "neg_003",
+    "category": "descriptive_statement",
+    "topic": "Should schools start later?",
+    "parent_text": "Later start times help students sleep more.",
+    "tile_text": "Many schools start before 8 a.m.",
+    "structure": { "relationship": "SUPPORTS" },
+    "expected": { "overgeneralization": false, "false_causation": false }
+  },
+  {
+    "id": "neg_004",
+    "category": "careful_causation_language",
+    "topic": "Is social media harmful to teenagers?",
+    "parent_text": "Social media affects student wellbeing.",
+    "tile_text": "There may be several reasons teen mental health has changed.",
+    "structure": { "relationship": "REBUTS" },
+    "expected": { "overgeneralization": false, "false_causation": false }
+  },
+  {
+    "id": "edge_001",
+    "category": "group_reference_without_universal_quantifier",
+    "topic": "Should schools reduce homework?",
+    "parent_text": "Homework is useful for practice.",
+    "tile_text": "Teenagers often feel stressed by homework.",
+    "structure": { "relationship": "REBUTS" },
+    "expected": { "overgeneralization": false, "false_causation": false }
+  },
+  {
+    "id": "edge_002",
+    "category": "combined_error",
+    "topic": "Should energy drinks be banned for minors?",
+    "parent_text": "Energy drinks should remain legal for teenagers.",
+    "tile_text": "Most teenagers who drink energy drinks develop heart problems because the drinks make them sick.",
+    "structure": { "relationship": "REBUTS" },
+    "expected": { "overgeneralization": true, "false_causation": true }
+  },
+  {
+    "id": "neg_005",
+    "category": "partial_quantifier",
+    "topic": "Should schools limit homework?",
+    "parent_text": "Homework is necessary for mastery.",
+    "tile_text": "Many students feel overwhelmed by nightly homework.",
+    "structure": { "relationship": "REBUTS" },
+    "expected": { "overgeneralization": false, "false_causation": false }
+  },
+  {
+    "id": "neg_006",
+    "category": "hedged_causal_language",
+    "topic": "Should cities create more bike lanes?",
+    "parent_text": "Bike lanes improve transportation access.",
+    "tile_text": "Bike lanes may contribute to safer streets when drivers expect cyclists to be present.",
+    "structure": { "relationship": "SUPPORTS" },
+    "expected": { "overgeneralization": false, "false_causation": false }
+  },
+  {
+    "id": "neg_007",
+    "category": "well_established_causation",
+    "topic": "Should schools teach public health?",
+    "parent_text": "Students should understand health risks.",
+    "tile_text": "Smoking causes cancer and is worth discussing in health class.",
+    "structure": { "relationship": "SUPPORTS" },
+    "expected": { "overgeneralization": false, "false_causation": false }
+  },
+  {
+    "id": "neg_008",
+    "category": "group_reference_but_not_majority",
+    "topic": "Should school lunches be free?",
+    "parent_text": "Free lunches reduce student stress.",
+    "tile_text": "Some families still struggle to pay for lunch each week.",
+    "structure": { "relationship": "SUPPORTS" },
+    "expected": { "overgeneralization": false, "false_causation": false }
+  },
+  {
+    "id": "neg_009",
+    "category": "descriptive_majority_fact",
+    "topic": "Should AI literacy be taught in high school?",
+    "parent_text": "Students already use AI tools outside school.",
+    "tile_text": "Most high school students have access to the internet at home.",
+    "structure": { "relationship": "SUPPORTS" },
+    "expected": { "overgeneralization": false, "false_causation": false }
+  },
+  {
+    "id": "fc_004",
+    "category": "temporal_sequence_only",
+    "topic": "Should schools start later?",
+    "parent_text": "Later start times help students focus.",
+    "tile_text": "After our district moved the start time later, attendance improved, so the schedule change caused it.",
+    "structure": { "relationship": "SUPPORTS" },
+    "expected": { "overgeneralization": false, "false_causation": true }
+  },
+  {
+    "id": "fc_005",
+    "category": "correlation_as_proof",
+    "topic": "Should cities plant more trees?",
+    "parent_text": "Trees make cities healthier.",
+    "tile_text": "Neighborhoods with more trees have lower stress, proving the trees are what reduce stress.",
+    "structure": { "relationship": "SUPPORTS" },
+    "expected": { "overgeneralization": false, "false_causation": true }
+  },
+  {
+    "id": "og_004",
+    "category": "implicit_group_generalization",
+    "topic": "Should colleges require attendance?",
+    "parent_text": "Attendance policies help students stay engaged.",
+    "tile_text": "College students are lazy when no one checks whether they show up.",
+    "structure": { "relationship": "REBUTS" },
+    "expected": { "overgeneralization": true, "false_causation": false }
+  },
+  {
+    "id": "og_005",
+    "category": "near_universal_scope",
+    "topic": "Should schools ban energy drinks?",
+    "parent_text": "Energy drinks help some students stay awake.",
+    "tile_text": "Nearly everyone who drinks energy drinks ends up crashing in class.",
+    "structure": { "relationship": "REBUTS" },
+    "expected": { "overgeneralization": true, "false_causation": false }
+  }
+]

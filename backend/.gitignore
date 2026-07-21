@@ -1,0 +1,14 @@
+node_modules
+dist
+.env
+agent/.env
+agent/venv/
+agent/.venv/
+agent/__pycache__/
+*.pyc
+agent/eval_log.jsonl
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

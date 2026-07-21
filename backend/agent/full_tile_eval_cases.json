@@ -1,0 +1,366 @@
+[
+  {
+    "id": "fw_001",
+    "label": "needs_more_detail_vague_claim",
+    "topic": "Should schools ban phones in class?",
+    "tile": {
+      "tileId": "fw_001",
+      "player": "plus",
+      "text": "It just makes class worse.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "minus",
+        "text": "Phones should be allowed because students need them for communication."
+      }
+    },
+    "expected": {
+      "display_feedback": true,
+      "first_wave_categories": ["needs_more_detail"],
+      "display_reason": "clarification_needed"
+    }
+  },
+  {
+    "id": "fw_002",
+    "label": "too_broad_overgeneralization",
+    "topic": "Should self-driving cars be allowed on public streets?",
+    "tile": {
+      "tileId": "fw_002",
+      "player": "minus",
+      "text": "Everyone is safer when a human is driving.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "plus",
+        "text": "Self-driving cars reduce driver error."
+      }
+    },
+    "expected": {
+      "display_feedback": true,
+      "first_wave_categories": ["too_broad"],
+      "display_reason": "reasoning_issue"
+    }
+  },
+  {
+    "id": "fw_003",
+    "label": "causal_leap_false_causation",
+    "topic": "Should schools start later?",
+    "tile": {
+      "tileId": "fw_003",
+      "player": "plus",
+      "text": "Attendance improved after the schedule changed, so the later start time caused it.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "minus",
+        "text": "Changing the school schedule creates transportation problems."
+      }
+    },
+    "expected": {
+      "display_feedback": true,
+      "first_wave_categories": ["causal_leap"],
+      "display_reason": "reasoning_issue"
+    }
+  },
+  {
+    "id": "fw_004",
+    "label": "needs_clearer_connection_irrelevant",
+    "topic": "Should cryptocurrency be legal?",
+    "tile": {
+      "tileId": "fw_004",
+      "player": "plus",
+      "text": "People also waste money on video games.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "minus",
+        "text": "Cryptocurrency scams hurt inexperienced investors."
+      }
+    },
+    "expected": {
+      "display_feedback": true,
+      "first_wave_categories": ["needs_clearer_connection"],
+      "display_reason": "irrelevant_to_parent"
+    }
+  },
+  {
+    "id": "fw_005",
+    "label": "exaggeration_extreme_factual_claim",
+    "topic": "Should social media companies be regulated?",
+    "tile": {
+      "tileId": "fw_005",
+      "player": "plus",
+      "text": "Social media has completely destroyed every teenager's mental health.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "minus",
+        "text": "Teens can choose how much time they spend online."
+      }
+    },
+    "expected": {
+      "display_feedback": true,
+      "first_wave_categories_includes": ["too_broad"],
+      "display_reason": "reasoning_issue"
+    }
+  },
+  {
+    "id": "fw_006",
+    "label": "personal_attack_ad_hominem",
+    "topic": "Should the voting age be lowered to 16?",
+    "tile": {
+      "tileId": "fw_006",
+      "player": "minus",
+      "text": "Only someone completely naive would think teenagers are mature enough to vote.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "plus",
+        "text": "Teenagers pay taxes and should have a say in how they are used."
+      }
+    },
+    "expected": {
+      "display_feedback": true,
+      "first_wave_categories_includes": ["personal_attack"],
+      "display_reason": "reasoning_issue"
+    }
+  },
+  {
+    "id": "fp_001",
+    "label": "short_valid_claim_should_pass",
+    "topic": "Should schools ban phones in class?",
+    "tile": {
+      "tileId": "fp_001",
+      "player": "plus",
+      "text": "Phones can be distracting.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "minus",
+        "text": "Students should be trusted to manage their own attention."
+      }
+    },
+    "expected": {
+      "display_feedback": false,
+      "first_wave_categories": [],
+      "display_reason": "no_feedback_needed"
+    }
+  },
+  {
+    "id": "fp_002",
+    "label": "value_opinion_should_pass",
+    "topic": "Should school lunches be free?",
+    "tile": {
+      "tileId": "fp_002",
+      "player": "plus",
+      "text": "This policy is unfair to low-income students.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "minus",
+        "text": "Families should pay for lunches if they can afford them."
+      }
+    },
+    "expected": {
+      "display_feedback": false,
+      "first_wave_categories": [],
+      "display_reason": "no_feedback_needed"
+    }
+  },
+  {
+    "id": "fp_003",
+    "label": "hedged_causal_claim_should_pass",
+    "topic": "Should schools ban phones in class?",
+    "tile": {
+      "tileId": "fp_003",
+      "player": "plus",
+      "text": "Phone bans can improve student focus during lessons.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "minus",
+        "text": "Students need phones to look up information."
+      }
+    },
+    "expected": {
+      "display_feedback": false,
+      "first_wave_categories": [],
+      "display_reason": "no_feedback_needed"
+    }
+  },
+  {
+    "id": "fp_004",
+    "label": "barrier_mechanism_should_pass",
+    "topic": "Should college tuition be free?",
+    "tile": {
+      "tileId": "fp_004",
+      "player": "plus",
+      "text": "Tuition debt stops many low-income students from finishing college.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "minus",
+        "text": "Students should take personal responsibility for funding their education."
+      }
+    },
+    "expected": {
+      "display_feedback": false,
+      "first_wave_categories": [],
+      "display_reason": "no_feedback_needed"
+    }
+  },
+  {
+    "id": "fp_005",
+    "label": "freedom_opinion_should_pass",
+    "topic": "Should schools require uniforms?",
+    "tile": {
+      "tileId": "fp_005",
+      "player": "minus",
+      "text": "Uniforms limit students' ability to express themselves.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "plus",
+        "text": "Uniforms help remove distractions and focus on learning."
+      }
+    },
+    "expected": {
+      "display_feedback": false,
+      "first_wave_categories": [],
+      "display_reason": "no_feedback_needed"
+    }
+  },
+  {
+    "id": "fp_006",
+    "label": "strong_but_scoped_claim_should_pass",
+    "topic": "Should the minimum wage be raised?",
+    "tile": {
+      "tileId": "fp_006",
+      "player": "plus",
+      "text": "Many small businesses would struggle to afford higher wages.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "minus",
+        "text": "Workers earning minimum wage cannot afford basic living costs."
+      }
+    },
+    "expected": {
+      "display_feedback": false,
+      "first_wave_categories": [],
+      "display_reason": "no_feedback_needed"
+    }
+  },
+  {
+    "id": "sr_001",
+    "label": "rewrite_preserves_plus_pro_stance",
+    "topic": "Should schools ban phones in class?",
+    "tile": {
+      "tileId": "sr_001",
+      "player": "plus",
+      "text": "It helps because social media is bad.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "minus",
+        "text": "Phone bans are too controlling."
+      }
+    },
+    "expected": {
+      "display_feedback": true,
+      "must_preserve_stance": true
+    }
+  },
+  {
+    "id": "sr_002",
+    "label": "rewrite_preserves_minus_con_stance",
+    "topic": "Should schools require uniforms?",
+    "tile": {
+      "tileId": "sr_002",
+      "player": "minus",
+      "text": "Uniforms are just bad because nobody likes them.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "plus",
+        "text": "Uniforms help students focus on learning."
+      }
+    },
+    "expected": {
+      "display_feedback": true,
+      "must_preserve_stance": true
+    }
+  },
+  {
+    "id": "sr_003",
+    "label": "rewrite_preserves_plus_stance_overgeneralization",
+    "topic": "Should the voting age be lowered to 16?",
+    "tile": {
+      "tileId": "sr_003",
+      "player": "plus",
+      "text": "All teenagers understand politics better than older generations.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "minus",
+        "text": "Most 16-year-olds lack the life experience to make informed political decisions."
+      }
+    },
+    "expected": {
+      "display_feedback": true,
+      "must_preserve_stance": true
+    }
+  },
+  {
+    "id": "sr_004",
+    "label": "rewrite_preserves_minus_stance_causal_leap",
+    "topic": "Should remote work be the default?",
+    "tile": {
+      "tileId": "sr_004",
+      "player": "minus",
+      "text": "Productivity dropped last quarter after remote work started, so remote work caused it.",
+      "parentId": "p1"
+    },
+    "game_board": {
+      "p1": {
+        "tileId": "p1",
+        "player": "plus",
+        "text": "Employees report higher satisfaction when working from home."
+      }
+    },
+    "expected": {
+      "display_feedback": true,
+      "must_preserve_stance": true
+    }
+  }
+]

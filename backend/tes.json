@@ -1,0 +1,12 @@
+{
+  "crypto_legal": { "N": "1" },
+  "health_insurance": { "N": "-1" },
+  "death_penalty": { "N": "-2" },
+  "ai_labeling": { "N": "2" },
+  "military_weapons": { "N": "0" },
+  "hotdog_sandwich": { "N": "2" },
+  "soda_tax": { "N": "1" },
+  "loan_forgiveness": { "N": "0" },
+  "astrology_serious": { "N": "1" },
+  "union_protections": { "N": "-1" }
+}

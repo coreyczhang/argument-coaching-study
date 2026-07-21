@@ -1,0 +1,527 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{array}
+\usepackage{tabularx}
+
+% Header / footer
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small Point Taken AI Co-Player}
+\lhead{\small Internal Documentation}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Section formatting
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titlespacing{\section}{0pt}{1.4em}{0.5em}
+\titlespacing{\subsection}{0pt}{1em}{0.3em}
+
+% List spacing
+\setlist[itemize]{topsep=3pt, itemsep=2pt, parsep=0pt}
+\setlist[enumerate]{topsep=3pt, itemsep=2pt, parsep=0pt}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  pdftitle={Point Taken AI Co-Player Documentation},
+}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% ---------------------------------------------------------------
+\begin{document}
+
+\begin{center}
+  {\LARGE \textbf{Point Taken AI Co-Player Documentation}} \\[0.5em]
+  {\normalsize Internal Technical Reference} \\[0.2em]
+  {Last Updated: \small \today}
+\end{center}
+
+\vspace{0.5em}
+\hrule
+\vspace{1.5em}
+
+% ---------------------------------------------------------------
+\section{Purpose}
+
+The AI Co-Player is a feature for Point Taken that enables solo practice against an AI
+opponent. The primary goal is to provide users with accessible practice opportunities when no
+human co-player is available, and to offer a lower-pressure learning environment for new players
+before they enter live multiplayer sessions.
+
+The research goal is to evaluate whether structured solo practice against an AI opponent
+improves player readiness and argument quality in subsequent human matches.
+
+% ---------------------------------------------------------------
+\section{Research Objective}
+
+The core objective is to study whether AI-mediated solo practice improves debate performance
+in live multiplayer sessions.
+
+\textbf{Core hypothesis:} Players who complete solo practice sessions against the AI Co-Player
+will produce higher-quality arguments and fewer reasoning errors in subsequent human matches
+compared to players who receive no prior practice.
+
+\textbf{Primary evaluation targets:}
+\begin{itemize}
+  \item Argument quality and reasoning error rate in the first human match after practice
+  \item Session completion rate for solo practice
+\end{itemize}
+
+\textbf{Secondary evaluation targets:}
+\begin{itemize}
+  \item AI response realism (does the AI behave like a plausible typical player?)
+  \item User perception of practice usefulness
+  \item Retention of players who practice before their first live game
+\end{itemize}
+
+% ---------------------------------------------------------------
+\section{Current Technical Stack}
+
+\begin{itemize}
+  \item \textbf{Frontend:} Nuxt 3 / Vue 3
+  \item \textbf{Backend:} Node.js / Express / Socket.io
+  \item \textbf{AI service:} FastAPI (Python)
+  \item \textbf{LLM provider:} Anthropic Claude (\texttt{claude-sonnet-4-5})
+  \item \textbf{Data store:} DynamoDB
+\end{itemize}
+
+\textbf{High-level request flow:}
+
+\begin{center}
+  \texttt{Frontend \(\rightarrow\) Backend (Socket.io) \(\rightarrow\) AI Service (FastAPI) \(\rightarrow\) Anthropic API \(\rightarrow\) Response \(\rightarrow\) Frontend}
+\end{center}
+
+The AI Co-Player extends this architecture with a dedicated co-player orchestration layer in the
+backend and a new prompt pipeline in the AI service.
+
+\textbf{Note:} The AI Feedback system (tile evaluation, 9-check fallacy detection, in-game
+coaching) is already implemented and deployed on the \texttt{backend-ai-feedback} /
+\texttt{demo-ai-feedback} branches. The AI Co-Player is a separate pipeline and will be built
+on top of the same FastAPI service and Anthropic client.
+
+% ---------------------------------------------------------------
+\section{System Overview}
+
+The AI Co-Player is organized around a turn-taking loop. After the human player places and
+confirms a tile, the backend triggers the AI Co-Player service, which uses the current game
+board and topic context to generate the AI's next move and return it as a valid tile.
+
+Key design constraints:
+\begin{itemize}
+  \item The AI must follow the same rules as a human player (valid tile structure, turn order,
+        no questions, no ad hominem language).
+  \item The AI simulates a \textit{typical average player}, not an expert or a tutor.
+  \item Responses must be topic-relevant and connect to the current thread (not generic restarts).
+  \item The system must handle AI failures gracefully without breaking the session.
+\end{itemize}
+
+% ---------------------------------------------------------------
+\section{AI Co-Player Behavior Specification}
+
+\subsection{Baseline Player Simulation}
+
+The AI Co-Player is designed to simulate an average player rather than an optimal debater.
+The goal is realistic practice, not one-sided coaching.
+
+Expected AI behavior:
+\begin{itemize}
+  \item Takes the opposing stance consistently throughout the session.
+  \item Places arguments that respond to the current thread.
+  \item Uses simple, direct language comparable to a typical student player.
+  \item Occasionally makes arguable or imperfect claims (consistent with average human play).
+  \item Does not lecture, tutor, or explicitly correct the human player.
+\end{itemize}
+
+\subsection{Follow-Up Turn Behavior}
+
+When generating a response tile, the AI must:
+\begin{itemize}
+  \item Read the parent tile and all ancestor tiles in the current thread.
+  \item Respond specifically to the parent tile's claim.
+  \item Not repeat its own prior arguments.
+  \item Stay on the debate topic established at session start.
+\end{itemize}
+
+\subsection{Stance}
+
+The AI must maintain its assigned opposing stance for the full session.
+
+\begin{itemize}
+  \item If the human player is Plus (supporting the topic), the AI plays Minus.
+  \item The AI may not switch positions mid-session.
+  \item Rewrites and follow-ups must remain consistent with the assigned side.
+\end{itemize}
+
+% ---------------------------------------------------------------
+\section{Functional Requirements}
+
+\subsection{Core Gameplay}
+
+\begin{enumerate}
+  \item[\textbf{FR-01}] Users can start a solo practice session without waiting for a human partner.
+  \item[\textbf{FR-02}] Users select the debate topic and their preferred stance before play begins.
+  \item[\textbf{FR-03}] The AI automatically takes the opposing stance to the user's choice.
+  \item[\textbf{FR-04}] The AI simulates baseline (average) player behavior, not an expert.
+  \item[\textbf{FR-05}] AI responses are topic-relevant and connect to the current board thread.
+  \item[\textbf{FR-06}] AI follows all tile structure and turn rules identically to human play.
+  \item[\textbf{FR-07}] Full solo sessions complete without requiring a human partner at any point.
+  \item[\textbf{FR-08}] Clear visual feedback is shown while the AI generates a response.
+  \item[\textbf{FR-09}] The system recovers gracefully when the AI is slow, unavailable, or produces
+        an invalid move.
+  \item[\textbf{FR-10}] All turns, timestamps, topics, stances, and response metadata are logged.
+  \item[\textbf{FR-11}] Anonymized session data can be exported for research evaluation.
+\end{enumerate}
+
+\subsection{Tile Reactions}
+
+Players may react to their opponent's confirmed tiles using a predefined set of reactions
+(e.g., thumbs up). Reactions are a lightweight social signal that acknowledges a strong or
+interesting opposing argument without interrupting the turn flow.
+
+\begin{enumerate}
+  \item[\textbf{FR-12}] A player can react to any confirmed tile placed by their opponent.
+  \item[\textbf{FR-13}] The supported reaction set for v1 is a single positive reaction
+        (thumbs up / \(\mathbf{+1}\)). Additional reaction types may be introduced in later
+        versions.
+  \item[\textbf{FR-14}] A player may react to a given tile at most once; toggling removes
+        the reaction.
+  \item[\textbf{FR-15}] Reaction counts are visible to both players in real time via
+        Socket.io broadcast.
+  \item[\textbf{FR-16}] Reactions do not affect turn order, scoring, or game outcome in v1.
+  \item[\textbf{FR-17}] In AI Co-Player sessions, the AI does not send reactions. The human
+        player may still react to AI tiles.
+  \item[\textbf{FR-18}] All reaction events (tile ID, actor, reaction type, timestamp) are
+        logged and included in session exports.
+\end{enumerate}
+
+\subsection{Session End and Tile Limits}
+
+Sessions do not have a fixed end condition but must not run indefinitely. The design uses a
+soft pressure model: play is uninterrupted below a tile threshold; above it, both players are
+increasingly nudged toward ending, with an automatic close at the hard cap.
+
+\begin{enumerate}
+  \item[\textbf{FR-19}] A configurable \textbf{soft tile limit} (default: 20 confirmed tiles)
+        triggers end-game prompts. Below this threshold, no end-game UI is shown.
+  \item[\textbf{FR-20}] Once the soft limit is reached, a persistent but non-blocking banner
+        is shown to both players after each subsequent turn, indicating that the board is
+        getting full and either player may call for a vote to end.
+  \item[\textbf{FR-21}] Either player may initiate an \textbf{end-game vote} at any point
+        after the soft limit is reached. The other player must accept or decline within a
+        configurable timeout (default: 60 seconds).
+  \item[\textbf{FR-22}] If the receiving player accepts, the session ends immediately and the
+        end-state screen is shown to both players.
+  \item[\textbf{FR-23}] If the receiving player declines or does not respond within the
+        timeout, play continues. The requesting player may re-initiate a vote on any subsequent
+        turn.
+  \item[\textbf{FR-24}] A configurable \textbf{hard tile cap} (default: 30 confirmed tiles)
+        triggers automatic session end regardless of player agreement. Both players are shown
+        a brief notification before the end-state screen.
+  \item[\textbf{FR-25}] The soft limit, hard cap, and vote timeout are configurable per
+        deployment environment (not hardcoded).
+  \item[\textbf{FR-26}] In AI Co-Player sessions, the AI always accepts an end-game vote.
+        The AI never initiates one.
+  \item[\textbf{FR-27}] Session end events (who initiated, accepted/auto, tile count at close,
+        timestamp) are logged for research analysis.
+\end{enumerate}
+
+\subsection{User Experience Requirements}
+
+\begin{enumerate}
+  \item[\textbf{UR-01}] Users can practice even when no human co-player is available.
+  \item[\textbf{UR-02}] New users can learn game mechanics in a lower-pressure solo environment.
+  \item[\textbf{UR-03}] AI responses feel on-topic and connected to the current thread.
+  \item[\textbf{UR-04}] Users are not left waiting an unreasonable amount of time for AI turns.
+  \item[\textbf{UR-05}] It is always clear when it is the user's turn versus the AI's turn.
+  \item[\textbf{UR-06}] The AI is perceived as following the same visible rules as human players.
+  \item[\textbf{UR-07}] Users finish sessions with a clear next step (e.g., join a live game).
+  \item[\textbf{UR-08}] Solo practice prepares users for subsequent human matches.
+  \item[\textbf{UR-09}] The AI behaves like a plausible typical player, not an obvious AI tutor.
+  \item[\textbf{UR-10}] Reacting to a tile is a single tap and does not disrupt the player's
+        turn flow.
+  \item[\textbf{UR-11}] Players can always see the current confirmed tile count and how far
+        they are from the soft limit and hard cap.
+  \item[\textbf{UR-12}] The path to ending a session is explicit and requires deliberate action;
+        sessions cannot be ended accidentally.
+  \item[\textbf{UR-13}] Once the soft limit is reached, the prompt to consider ending feels
+        like a natural nudge rather than a disruption or failure state.
+\end{enumerate}
+
+% ---------------------------------------------------------------
+\section{Technical Requirements by Layer}
+
+\subsection{Backend}
+
+\begin{itemize}
+  \item Practice sessions are stored separately from or clearly distinguished from multiplayer games.
+  \item The AI turn orchestration service receives topic, opposing stance, and full board context.
+  \item State validation enforces legal turn order and valid tile structure before AI moves.
+  \item All session data is logged at sufficient granularity for research analysis.
+  \item Admin and export tooling provides approved access to anonymized session data.
+  \item Failure recovery includes retries and safe fallback messaging for the frontend.
+  \item Reaction events are stored per tile in the game record and broadcast to all session
+        participants via Socket.io.
+  \item Tile count is maintained server-side; soft limit and hard cap thresholds are read from
+        environment configuration, not hardcoded.
+  \item End-game vote state (pending, accepted, declined, expired) is tracked in the game record.
+        The hard-cap auto-end is enforced server-side on every tile confirmation, not client-side.
+\end{itemize}
+
+\subsection{AI Service}
+
+\begin{itemize}
+  \item The AI prompt encodes Point Taken board structure, tile relationships, and turn conventions.
+  \item Baseline player simulation is explicitly specified (average behavior, not expert).
+  \item Topic relevance is maintained across the full session using accumulated context.
+  \item Opposing stance fidelity is enforced at the prompt level and verified in output.
+  \item Follow-up quality is measured against criteria: relevance, non-repetition, coherence.
+  \item An evaluation harness supports stance fidelity, topic relevance, and realism scoring.
+  \item All agent outputs must be valid JSON only; no extra text outside the JSON.
+  \item The AI service uses the Anthropic Python SDK (\texttt{anthropic}) with
+        \texttt{claude-sonnet-4-5} as the default model. The model is configurable via the
+        \texttt{ANTHROPIC\_MODEL} environment variable.
+  \item The existing AI Feedback pipeline (\texttt{agents.py}) provides reference patterns for
+        prompt structure, JSON output enforcement, and fallback handling that the co-player
+        pipeline should follow.
+  \item The AI always accepts end-game votes; this is handled in the backend orchestration
+        layer, not in the AI service prompt.
+\end{itemize}
+
+\subsection{Frontend}
+
+\begin{itemize}
+  \item A clear entry point separates practice mode from multiplayer game flow.
+  \item A topic and side selection flow precedes session start.
+  \item Turn state is always visible (human turn / AI thinking / AI turn played).
+  \item AI loading and thinking states are visually distinct.
+  \item Session end state provides clear onward options for the user.
+  \item Error states display graceful fallback messaging.
+  \item Each opponent tile renders a reaction affordance (thumbs up icon + count). The icon
+        is visually active when the current player has reacted to that tile.
+  \item A tile counter (e.g., \textit{``18 / 20 tiles''}) is visible on the board at all times.
+        The counter changes color or style as it approaches the soft limit.
+  \item Above the soft limit, a persistent banner prompts players to consider ending. A single
+        action opens the end-game vote flow.
+  \item The end-game vote UI shows clearly who initiated, and presents the receiving player
+        with an accept / decline choice and a countdown to timeout.
+  \item The hard-cap auto-end displays a brief ``Board full'' notification before transitioning
+        to the end-state screen.
+\end{itemize}
+
+% ---------------------------------------------------------------
+\section{Prompt Engineering Requirements}
+
+Prompts for the AI Co-Player must satisfy the following:
+
+\begin{itemize}
+  \item Provide explicit game rules (tile types, turn order, stance constraints).
+  \item Specify the target player persona (typical average player, not expert).
+  \item Include positive examples of good AI moves and negative examples to avoid.
+  \item Add hard rules to prevent off-topic responses, stance switching, and rule violations.
+  \item Require structured JSON output with no additional explanatory text.
+  \item Version all prompts so changes can be tracked across evaluation rounds.
+\end{itemize}
+
+The general philosophy is \textbf{realism first}. The AI should feel like a plausible debate
+partner, not a helpful assistant or a content moderator.
+
+\textbf{Reference implementation:} The AI Feedback system's \texttt{analysis\_agent} prompt
+(in \texttt{agent/agents.py}) demonstrates the required output discipline: strict JSON schema,
+decision-procedure format, and version-tagged prompts. Co-player prompts should follow the
+same conventions.
+
+% ---------------------------------------------------------------
+\section{Evaluation Framework}
+
+\subsection{Product Readiness Criteria}
+
+\begin{itemize}
+  \item AI responses are consistently topic-relevant across all tested debate topics.
+  \item The AI maintains opposing stance fidelity throughout full sessions.
+  \item AI turns feel coherent and connected to the parent tile, not generic.
+  \item Session failure rate (invalid move, crash, timeout) is below an acceptable threshold.
+  \item Users report the AI as a believable practice partner in usability testing.
+\end{itemize}
+
+\subsection{Operational Targets}
+
+\begin{itemize}
+  \item $\geq$85\% of AI responses rated as topic-relevant on a labeled evaluation set.
+  \item $\geq$95\% opposing-stance fidelity across reviewed session samples.
+  \item $\leq$10\% invalid-move rate (malformed tiles, rule violations) in stress testing.
+  \item 100\% metadata presence: tileId, topic, stance, modelName, promptVersion, timestamp.
+  \item AI turn latency within acceptable bounds for live session flow. ($\leq$10 seconds per response)
+\end{itemize}
+
+\subsection{Evaluation Harness}
+
+The evaluation harness should include:
+\begin{enumerate}
+  \item A labeled test set of 15--25 game scenarios (topic, board state, expected AI move type).
+  \item Automated checks for stance fidelity and JSON validity.
+  \item Human review rubric for topic relevance and typical-player realism.
+  \item Before/after outputs for each prompt iteration.
+  \item Summary report of false positives (off-topic, wrong-stance, rule-violating moves).
+\end{enumerate}
+
+% ---------------------------------------------------------------
+\section{Data Collection and Analysis}
+
+The system must log sufficient data to support both debugging and research evaluation.
+
+\textbf{Required log fields per session:}
+\begin{itemize}
+  \item Session ID and timestamp
+  \item Debate topic and assigned stances (human and AI)
+  \item Full tile sequence with authorship (human vs.\ AI) and timestamps
+  \item AI model name and prompt version for each AI turn
+  \item Any failure events (timeout, invalid move, fallback triggered)
+  \item All reaction events: tile ID, reactor, reaction type, timestamp
+  \item Session end event: initiator (human or auto), tile count at close, outcome
+        (agreed / declined / hard-cap), timestamp
+\end{itemize}
+
+\textbf{Research analysis targets:}
+\begin{itemize}
+  \item Comparison of argument quality between players who practiced and those who did not.
+  \item AI response quality over time as prompts are iterated.
+  \item Session completion rate and drop-off points.
+  \item Reaction rate as a proxy signal for argument quality and engagement
+        (tiles that receive reactions may indicate stronger or more surprising arguments).
+  \item Distribution of session lengths and end-game trigger types (agreed, declined, hard-cap)
+        to inform default tile limit configuration.
+\end{itemize}
+
+% ---------------------------------------------------------------
+\section{Experimental Design}
+
+The study should support at least two player conditions:
+
+\begin{itemize}
+  \item \textbf{Control:} Players enter their first live game with no prior solo practice.
+  \item \textbf{Treatment:} Players complete at least one AI Co-Player session before live play.
+\end{itemize}
+
+\textbf{Core metrics:}
+\begin{itemize}
+  \item Reasoning error rate in first live game
+  \item Argument coherence scores
+  \item User-reported confidence and preparation
+\end{itemize}
+
+\textbf{Implementation requirement:} The system must include a reliable condition assignment
+mechanism so players can be consistently allocated to practice vs.\ no-practice conditions.
+
+% ---------------------------------------------------------------
+\section{Open Questions}
+
+The following questions require alignment before full implementation:
+
+\begin{enumerate}
+  \item Should practice mode mirror the live multiplayer board exactly or use a simplified
+        solo-specific flow?
+  \item Is post-round review (showing AI move quality, flagging errors) part of v1 scope?
+  \item What is the minimum session length that constitutes meaningful practice?
+  \item Should future versions support differentiated AI player types (e.g., aggressive,
+        conciliatory, evidence-focused)?
+  \item How should practice sessions be surfaced to users --- opt-in, prompted, or required
+        for new accounts?
+  \item Should reactions be visible to the opponent in real time, or only shown as a
+        summary at session end? Real-time visibility may influence player behavior (positive
+        feedback loop) in ways that affect research validity.
+  \item Should the reaction set expand beyond thumbs up in v1 (e.g., a ``strong point''
+        badge, a ``disagree'' reaction)? Additional reaction types add signal richness but
+        increase UI complexity.
+  \item What are the right defaults for the soft limit (20 tiles) and hard cap (30 tiles)?
+        These should be validated against pilot session data before the research study begins.
+  \item Should players be able to agree to end a session \textit{before} the soft limit is
+        reached (e.g., if one player wants to quit early), and if so, how is that handled
+        in the research dataset?
+\end{enumerate}
+
+% ---------------------------------------------------------------
+\section{Role Specifications}
+
+\subsection{Technical Lead \& Core Developer --- Corey Zhang}
+
+\begin{itemize}
+  \item Own and implement the full AI Co-Player pipeline end-to-end: session creation,
+        LLM integration, response validation, turn orchestration, and logging.
+  \item Build the co-player agent in \texttt{agent/agents.py} using the Anthropic Python SDK,
+        following the patterns established by the existing AI Feedback pipeline.
+  \item Define and enforce the AI input/output contract across the backend and AI service.
+  \item Implement the \texttt{/co-player/turn} FastAPI endpoint: receive board context, call
+        the LLM, validate output, and return a well-formed tile.
+  \item Build output validation and fallback handling (malformed JSON, invalid tile structure,
+        stance drift).
+  \item Wire the co-player endpoint into the backend Socket.io game flow in coordination
+        with Christopher.
+  \item Implement session logging and research export tooling; instrument the pipeline with
+        prompt version, model name, latency, and failure metadata.
+  \item Set prompt engineering standards: stance fidelity, topic relevance, baseline persona.
+  \item Define evaluation criteria and oversee the evaluation harness.
+  \item Document all prompts, test cases, and design decisions in shared project resources.
+  \item Coordinate work between Kim and Mahnum; surface blockers to Steve, Athira, and Emma.
+\end{itemize}
+
+\subsection{Prompt Engineering --- Mahnum Somji}
+
+\begin{itemize}
+  \item Develop and iterate the AI Co-Player turn-generation prompt: persona specification,
+        stance enforcement, topic relevance, and output schema.
+  \item Iterate prompts based on evaluation harness results and false-positive reports.
+  \item Maintain versioned prompt files and document each revision with before/after outputs.
+  \item Build and expand the labeled evaluation harness (15--25 game scenarios minimum).
+  \item Run human review passes for topic relevance and typical-player realism scoring.
+  \item Deliver prompt iterations and evaluation summaries on a two-week cycle.
+\end{itemize}
+
+\subsection{Model Orchestration Support --- Kim Xiao}
+
+\begin{itemize}
+  \item Support Corey on AI service integration tasks as needed.
+  \item Assist with testing and validating co-player outputs against the evaluation harness.
+  \item Help instrument and review session logs for research metadata completeness.
+  \item Coordinate with and mentor Mahnum on prompt testing and iteration feedback loops.
+\end{itemize}
+
+\subsection{Backend Dev --- Christopher Heo}
+
+\begin{itemize}
+  \item Implement the practice session lifecycle (creation, turn orchestration, persistence).
+  \item Integrate the AI Co-Player service into the existing Socket.io game flow.
+  \item Implement failure recovery: retries, timeouts, and safe fallback messaging.
+  \item Build the session logging layer and admin export endpoints.
+  \item Implement the tile reaction Socket.io events (\texttt{addReaction},
+        \texttt{removeReaction}) and persist reaction data in the game record.
+  \item Implement tile count tracking, soft-limit detection, end-game vote state machine,
+        and hard-cap enforcement in the backend game flow.
+\end{itemize}
+
+\subsection{Frontend Dev + UI/UX Design --- Christopher Heo, Audrey Chung}
+
+\begin{itemize}
+  \item Build practice mode entry points and topic/side selection flow.
+  \item Implement AI thinking state and turn ownership indicators.
+  \item Handle error states and session end with clear next-step options.
+  \item Ensure the practice board and live game board share visual consistency.
+  \item Design and implement the per-tile reaction affordance on opponent tiles.
+  \item Design and implement the tile counter, soft-limit banner, end-game vote UI,
+        and hard-cap auto-end notification.
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,15 @@
+.git
+node_modules
+src
+tests
+.vscode
+*.md
+coverage
+tsconfig.json
+.eslint*
+.prettier*
+agent/venv
+agent/.venv
+agent/__pycache__
+agent/eval_outputs
+agent/eval_log.jsonl

@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Coming+Soon&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+    /** Colors **/
+    /* primary */
+    --color-green: #49CA81;
+    --color-orange: #FFB42F;
+
+    /* secondary */
+    --color-mint: #9DF4C5;
+    --color-peach: #FFE083;
+
+    /* neutral */
+    --color-neutral-black: #1E1E1E;
+    --color-neutral-white: #FFFCF5;
+    --color-gray: #747474;
+    --color-offwhite: #FFFCF5;
+
+    /* other colors */
+    --color-sand: #FFD979;
+    --color-gold: #EFAE45;
+    --color-brown: #73674E;
+
+    /** Fonts **/
+    --font-primary: 'Anton', sans-serif;
+    --font-secondary: 'Noto Sans', sans-serif;  
+    --font-tiles: 'Coming Soon', cursive;
+
+    --text-p-lg: 20px;
+    --text-p-md: 16px;
+    --text-p-sm: 13px;
+
+    /** Drop Shadow **/
+    --shadow-lg: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    --shadow-md: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    background-color: #FFFCF5;
+}
+
+h1, h2, h3 {
+    font-family: 'Anton', sans-serif;
+    font-weight: normal;
+}
+
+h1 {
+    font-size: 56px;
+}
+
+h2 {
+    font-size: 48px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+h4, h5, h6, p {
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.form-base {
+    padding: 12px;
+    border: 2px solid var(--color-gray);
+    border-radius: 6px;
+    background-color: var(--color-neutral-white);
+    color: var(--color-gray);
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+}
+
+.btn-primary {
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-icon {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.input-primary {
+    flex: 1;
+    text-align: left;
+}
+
+.input-primary::placeholder {
+    color: var(--color-gray);
+}
+

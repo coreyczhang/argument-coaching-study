@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: point-taken-ai-agent
+    env: python
+    rootDir: agent
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_MODEL
+        value: claude-sonnet-4-5
+      - key: AI_ALLOWED_ORIGINS
+        value: https://point-taken-nine.vercel.app,https://play.pointtaken.social,http://localhost:3000,http://127.0.0.1:3000,http://localhost:3100,http://127.0.0.1:3100

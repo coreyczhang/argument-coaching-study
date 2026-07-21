@@ -1,0 +1,39 @@
+{
+  "name": "point-taken-backend",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "nodemon dist/server.js",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "export:games": "npm run build && node dist/exportGames.js",
+    "export:games:csv": "npm run build && node dist/convertAnonymizedExportToCsv.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.9",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/uuid": "^11.0.0",
+    "nodemon": "^3.1.10",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.835.0",
+    "@aws-sdk/client-secrets-manager": "^3.891.0",
+    "@aws-sdk/lib-dynamodb": "^3.835.0",
+    "argon2": "^0.44.0",
+    "aws-jwt-verify": "^5.1.1",
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.8.1",
+    "uuid": "^11.1.0"
+  }
+}
