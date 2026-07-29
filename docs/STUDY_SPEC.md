@@ -3,7 +3,7 @@
 **Status:** design approved (Steve + Aakriti, July 2026). This supersedes the earlier
 single-round, in-play-coaching prototype.
 
-**One line:** replicate the empathic-communication "practice + LLM coach" paradigm, swapping
+**Summary:** replicate the empathic-communication "practice + LLM coach" paradigm, swapping
 the support conversation for the structured argument game, to test whether an AI coach helps
 people get better at disagreeing over repeated rounds.
 
@@ -16,7 +16,7 @@ people get better at disagreeing over repeated rounds.
 
 ---
 
-## Design at a glance
+## Design
 
 | | |
 |---|---|
@@ -75,7 +75,7 @@ dimensions (mapped to the empathic rubric):
 Each scored per round; **composite** (mean) is the headline number that should rise across
 rounds. Full draft + scoring format + open questions: see `DISAGREEMENT_RUBRIC_DRAFT.md`.
 
-**Primary outcome:** change in composite from round 1 → N, treatment vs. control.
+**Primary outcome:** change in composite from round 1 to N, treatment vs. control.
 
 ---
 
