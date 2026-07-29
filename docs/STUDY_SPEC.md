@@ -95,14 +95,20 @@ rounds. Full draft + scoring format + open questions: see `DISAGREEMENT_RUBRIC_D
 
 ---
 
+## Scaffold to fork: e4
+
+Confirmed with Aakriti: fork the **e4** online setup (`routes_e4_llm_rpg.py`,
+`models_e4_rpg.py`, `templates/rpg/`). e14/e15 are the in-person versions of e4, so e4 is
+the right base for our online study. We'll take a new experiment number (e18+, since e17 is
+taken) once assigned.
+
 ## Open items for Aakriti
 
-1. **Experiment number** and which existing experiment to **fork as the scaffold** (mindworks
-   or RPG?), so this matches HAIC structure.
-2. Rubric decisions: scale to match the empathic version, whole-round vs. per-argument
+1. Rubric decisions: scale to match the empathic version, whole-round vs. per-argument
    scoring, whether to add a 4th "clarity" dimension, and the validation plan (hand-rate +
    judge agreement, per the Nature MI paper).
-3. Number of rounds and round length.
+2. Number of rounds and round length.
+3. The next free experiment number to claim.
 
 ---
 
