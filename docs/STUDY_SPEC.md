@@ -114,6 +114,19 @@ taken) once assigned.
 
 ## Status of the pieces
 
-- **Built:** the game, the real evaluation model, AWS + repo setup, and the RPG template to copy.
-- **Building next:** the multi-round loop, the between-round coach page, and the rubric.
-- **Blocked:** AWS migration to the NU account (waiting on credentials).
+**Built and verified:**
+- The game, the real evaluation model, AWS + repo setup.
+- The **e18 scaffold** (fork of e4) — full flow walks: consent → instructions → baseline →
+  [round → coach] × N → finish → completion. Condition branching works (treatment sees the
+  coach page, control skips it); rounds persist; tables create. See `mattgroh/haic` PR #112.
+- The **round wiring (HAIC side)** — `/round` creates a real game on the backend, rotates
+  the topic per round, and hands off with the round-complete postback URL.
+
+**Next, and what each is blocked on:**
+- **Game-frontend round page** (round-only board + AI-opponent auto-start + postback):
+  buildable but needs the game deployed to verify → blocked on **NU AWS credentials**.
+- **`vsAi` in study-game creation** (start the game with the AI co-player): same deploy gate.
+- **Rubric scoring** (`_score_round`): blocked on **Aakriti's rubric decisions** (dimensions,
+  scale) — see the open items above.
+
+**Blocked:** AWS migration to the NU account (waiting on credentials from Steve).
