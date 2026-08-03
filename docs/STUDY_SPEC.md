@@ -129,4 +129,7 @@ taken) once assigned.
 - **Rubric scoring** (`_score_round`): blocked on **Aakriti's rubric decisions** (dimensions,
   scale) — see the open items above.
 
-**Blocked:** AWS migration to the NU account (waiting on credentials from Steve).
+**AWS migration to the NU account (225317159017): DONE.** The study stack is live at
+`https://dp5wkeqgw25kj.cloudfront.net` — DynamoDB (instance-role auth, no static keys),
+Cognito, EB backend + Python agent, S3 + CloudFront. Verified end to end except the AI
+coach, which is dark until the Anthropic credit balance is topped up (no redeploy needed).
