@@ -21,10 +21,11 @@ const freshBoard = (): Record<string, Tile> => ({
 
 export const createStudyGame: any = async (req: Request, res: Response) => {
   try {
-    const { topic, condition, role = "plus" } = req.body as {
+    const { topic, condition, role = "plus", vsAi = false } = req.body as {
       topic: string;
       condition: "AI_FEEDBACK" | "CONTROL";
       role?: "plus" | "minus";
+      vsAi?: boolean;
     };
 
     if (!topic || !condition) {
@@ -36,6 +37,39 @@ export const createStudyGame: any = async (req: Request, res: Response) => {
     const board = freshBoard();
     board["0"].text = topic;
 
+    // Solo-vs-AI round (e18 study): seed an AI opponent on the opposite side so the
+    // board shows two sides and the participant has something to argue against. The
+    // opponent's opening tiles are pre-filled statically (no live agent call), so the
+    // round works even when the AI agent is unavailable; a funded agent can replace
+    // these with live moves later without changing this contract.
+    const aiRole = role === "plus" ? "minus" : "plus";
+    const players: any[] = [{
+      userId: req.user!.userId,
+      name: "Participant",
+      role,
+      money: 0,
+      acknowledged: [true, true, true, true],
+    }];
+    if (vsAi) {
+      players.push({
+        userId: "ai-coplayer",
+        name: "AI",
+        role: aiRole,
+        money: 0,
+        isAi: true,
+        acknowledged: [true, true, true, true],
+      });
+      // Pre-fill the AI side's two opening tiles so the opponent's case is visible.
+      const aiTileIds = aiRole === "minus" ? ["3", "4"] : ["1", "2"];
+      const aiOpeners = [
+        "Here's the strongest case for my side — see if you can address it.",
+        "And a second reason the other view holds up.",
+      ];
+      aiTileIds.forEach((id, i) => {
+        if (board[id]) { board[id].text = aiOpeners[i]; board[id].confirmed = true; }
+      });
+    }
+
     await ddbClient.send(new PutCommand({
       TableName: "Games",
       Item: {
@@ -43,20 +77,15 @@ export const createStudyGame: any = async (req: Request, res: Response) => {
         code: gameCode,
         date: new Date().toISOString(),
         hostId: req.user!.userId,
-        status: "waiting",
+        status: vsAi ? "in-progress" : "waiting",
         isStudyGame: true,
+        isAiGame: vsAi,
         topic: { text: topic, revised: false },
         aiConfig: {
           enabled: condition === "AI_FEEDBACK",
           condition,
         },
-        players: [{
-          userId: req.user!.userId,
-          name: "Participant",
-          role,
-          money: 0,
-          acknowledged: [true, true, true, true],
-        }],
+        players,
         gameBoard: board,
       },
     }));

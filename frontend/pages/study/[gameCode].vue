@@ -335,6 +335,15 @@
       </div>
     </div>
 
+    <!-- Round mode: let the participant end the round and go to the coach recap. -->
+    <div v-if="isRound && !roundHandedOff" class="fixed z-40 bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 rounded-full border border-[#e8ddd6] bg-white/95 px-4 py-2.5 shadow-[0_6px_20px_rgba(59,52,47,0.16)] backdrop-blur">
+      <span class="text-xs text-[#8d8379]">Done making your case?</span>
+      <button
+        class="rounded-full bg-[#3b342f] px-5 py-2 text-sm font-semibold text-white hover:bg-[#2a2521]"
+        @click="finishRound"
+      >Finish round →</button>
+    </div>
+
     <WinAlert v-if="isTopicRevised" winCondition="topic" :newTopic="game!.topic.text" />
     <WinAlert v-else-if="resolvedThreadsCount === 4" winCondition="threads" :threads="resolvedThreadsForAlert" />
     <InstructionsModal :is-open="isInstructionsOpen" @close="isInstructionsOpen = false" />
@@ -393,7 +402,12 @@ const config = useRuntimeConfig()
 const gameCode = (route.params.gameCode as string) || ''
 const rawPid = (route.query.pid as string) || ''
 const studyPid = rawPid || `anon-${Math.random().toString(36).slice(2, 8)}`
-const studyCondition = (route.query.condition as string) || 'CONTROL'
+// Round mode (e18 multi-round study): the board is one round inside the HAIC coaching
+// flow. Skip the game's own consent/survey, go straight to the board, and on finish
+// hand back to HAIC (which shows the between-round coach). Coaching is between rounds,
+// so there is never in-play AI feedback in round mode — force CONTROL board behavior.
+const isRound = (route.query.mode as string) === 'round'
+const studyCondition = isRound ? 'CONTROL' : ((route.query.condition as string) || 'CONTROL')
 const haicUrl = (route.query.haicUrl as string) || ''
 
 // Study pipeline stage
@@ -463,12 +477,26 @@ const myRole = computed<'plus' | 'minus' | null>(() => {
   return p ? p.role : null
 })
 
-// Go to post-survey when game ends
+// Game ends: round mode hands back to HAIC; standalone study goes to its post-survey.
 watch([isTopicRevised, resolvedThreadsCount], ([revised, count]) => {
   if (revised || count === 4) {
-    setTimeout(() => { stage.value = 'post-survey' }, 3000)
+    if (isRound) { setTimeout(finishRound, 2500) }
+    else { setTimeout(() => { stage.value = 'post-survey' }, 3000) }
   }
 })
+
+// Hand the finished round back to the HAIC coaching flow. HAIC pulls the arguments
+// server-side from the game backend (by game code), so we just carry the code.
+const roundHandedOff = ref(false)
+function finishRound() {
+  if (roundHandedOff.value || !haicUrl) return
+  roundHandedOff.value = true
+  stage.value = 'done'
+  const url = new URL(haicUrl)
+  url.searchParams.set('game_code', gameCode)
+  url.searchParams.set('pid', studyPid)
+  window.location.href = url.toString()
+}
 
 const KNOWN_PREFIXES = ['Yes, because', 'No, because', 'Because', 'But']
 function stripPrefix(text: string): string {
@@ -606,9 +634,9 @@ async function initGame() {
     }
   })
 
-  // Always start in the waiting room; the presence event promotes us to the
-  // board only once a second player is actually connected.
-  stage.value = 'waiting'
+  // Round mode is single human vs. the (pre-seeded) AI opponent — no second human
+  // to wait for, so go straight to the board. Standalone study waits for a partner.
+  stage.value = isRound ? 'game' : 'waiting'
 }
 
 onMounted(async () => {
@@ -623,6 +651,9 @@ onMounted(async () => {
       topicText.value = body?.data?.game?.topic?.text ?? ''
     }
   } catch { /* topic display is best-effort */ }
+
+  // Round mode skips the game's own consent/pre-survey and jumps into the board.
+  if (isRound) { await proceedToGame() }
 })
 
 const initError = ref('')
