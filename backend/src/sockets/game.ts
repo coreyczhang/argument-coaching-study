@@ -4,6 +4,7 @@ import { GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { ddbClient } from "../dbClient";
 import { Tile } from "../models/Tile";
 import type { AiEvaluationRecord, GameActionType } from "../models/Game";
+import { placeScriptedAiReply, AI_USER_ID } from "./aiCoplayer";
 
 async function updateWithOptionalLog(opts: {
   gameId: string;
@@ -316,6 +317,25 @@ export default function gameplayHandlers(io: Server, socket: Socket) {
           console.error("ai evaluation error:", aiErr);
           // Always resolve the reading indicator even on error
           socket.emit("aiFeedback", { errors_found: false, display_feedback: false });
+        }
+
+        // Scripted AI co-player: in a solo-vs-AI round, reply to the human's tile
+        // with a canned rebuttal so the round feels interactive without the agent.
+        // (When the agent is funded, the live co-player does this instead.)
+        try {
+          if (userId !== AI_USER_ID) {
+            const game = await fetchGameSnapshot(gameId);
+            const board = (game?.gameBoard ?? {}) as Record<string, Tile>;
+            const humanTile = board[tileId];
+            if ((game as any)?.isAiGame && humanTile?.player) {
+              const aiRole = humanTile.player === "plus" ? "minus" : "plus";
+              await placeScriptedAiReply({
+                io, gameCode, gameId, board, humanTileId: tileId, aiRole,
+              });
+            }
+          }
+        } catch (coErr) {
+          console.error("scripted co-player error:", coErr);
         }
       } catch (err) {
         console.error("confirmTile error:", err);
