@@ -112,6 +112,26 @@ taken) once assigned.
 
 ---
 
+## Release-candidate status (Aug 2026)
+
+The full participant experience is built and runs end to end: consent → real baseline
+survey → instructions → [ play a round vs. a reactive AI opponent → coach scorecard ] × 3
+→ real exit survey → completion. Control vs. AICoach randomization works. The round board
+has real topic-specific opponent openers, a reactive (scripted) co-player, and an
+argument counter; the coach page is a full scorecard (overall /5, the scale spelled out,
+per-dimension description + bar + specific comment, a recap of the participant's own
+arguments, a next-round tip, and a working ask-the-coach).
+
+**Two gates remain before a Prolific release:**
+1. **A funded Anthropic key** flips the coach comments/scores and the AI opponent from
+   scripted demo content to the live LLM (set `ANTHROPIC_API_KEY`, drop `E18_DEMO_MODE`;
+   no code change).
+2. **Aakriti signs off on the measures** — the survey items and the rubric dimensions.
+   What's deployed is a real, e4-mirrored first version, swappable in place.
+
+Round-end model: a round ends when the participant clicks **Finish round** (deliberate, so
+rounds stay comparable in length), not via the game's emoji thread-resolution.
+
 ## Status of the pieces
 
 **Built and verified:**
