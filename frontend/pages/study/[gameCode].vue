@@ -337,9 +337,13 @@
 
     <!-- Round mode: let the participant end the round and go to the coach recap. -->
     <div v-if="isRound && !roundHandedOff" class="fixed z-40 bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 rounded-full border border-[#e8ddd6] bg-white/95 px-4 py-2.5 shadow-[0_6px_20px_rgba(59,52,47,0.16)] backdrop-blur">
-      <span class="text-xs text-[#8d8379]">Done making your case?</span>
+      <span class="text-xs text-[#8d8379]">
+        <span class="font-semibold text-[#3b342f]">{{ myArgumentCount }}</span>
+        argument{{ myArgumentCount === 1 ? '' : 's' }} made{{ myArgumentCount < 2 ? ' · try to make at least a couple' : ' · finish whenever you\'re ready' }}
+      </span>
       <button
-        class="rounded-full bg-[#3b342f] px-5 py-2 text-sm font-semibold text-white hover:bg-[#2a2521]"
+        class="rounded-full bg-[#3b342f] px-5 py-2 text-sm font-semibold text-white hover:bg-[#2a2521] disabled:opacity-40 disabled:cursor-not-allowed"
+        :disabled="myArgumentCount < 1"
         @click="finishRound"
       >Finish round →</button>
     </div>
@@ -475,6 +479,18 @@ const myRole = computed<'plus' | 'minus' | null>(() => {
   if (!game.value || !me.value) return null
   const p = players.value.find(p => p.userId === me.value)
   return p ? p.role : null
+})
+
+// How many real arguments the participant has made this round (confirmed, non-root,
+// non-empty tiles on their side). Drives the round-mode "arguments made" counter.
+const myArgumentCount = computed(() => {
+  if (!game.value || !myRole.value) return 0
+  return Object.entries(game.value.gameBoard).filter(([id, t]) =>
+    !['0', '1', '2', '3', '4'].includes(id) &&
+    (t as Tile).player === myRole.value &&
+    (t as Tile).confirmed &&
+    !!((t as Tile).text && (t as Tile).text.trim())
+  ).length
 })
 
 // Game ends: round mode hands back to HAIC; standalone study goes to its post-survey.
