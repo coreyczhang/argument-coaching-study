@@ -209,6 +209,18 @@
   </div>
 
   <!-- DONE STAGE -->
+  <div v-else-if="stage === 'handoff'" class="min-h-screen bg-[#FFFCF5] flex items-center justify-center p-6">
+    <div class="max-w-md w-full text-center">
+      <div class="flex justify-center gap-1.5 mb-6">
+        <span class="h-2.5 w-2.5 animate-bounce rounded-full bg-[#EFAE45] [animation-delay:-0.3s]"></span>
+        <span class="h-2.5 w-2.5 animate-bounce rounded-full bg-[#EFAE45] [animation-delay:-0.15s]"></span>
+        <span class="h-2.5 w-2.5 animate-bounce rounded-full bg-[#EFAE45]"></span>
+      </div>
+      <h1 class="text-2xl font-bold text-[#3b342f] mb-2">Nice round!</h1>
+      <p class="text-sm text-[#8d8379]">Saving your arguments…</p>
+    </div>
+  </div>
+
   <div v-else-if="stage === 'done'" class="min-h-screen bg-[#faf7f4] flex items-center justify-center p-6">
     <div class="max-w-md w-full bg-white rounded-3xl border border-[#e8ddd6] shadow-sm p-10 text-center">
       <div class="text-5xl mb-6">🎉</div>
@@ -415,7 +427,7 @@ const studyCondition = isRound ? 'CONTROL' : ((route.query.condition as string) 
 const haicUrl = (route.query.haicUrl as string) || ''
 
 // Study pipeline stage
-const stage = ref<'consent' | 'pre-survey' | 'waiting' | 'game' | 'post-survey' | 'done'>('consent')
+const stage = ref<'consent' | 'pre-survey' | 'waiting' | 'game' | 'post-survey' | 'done' | 'handoff'>('consent')
 const consentChecked = ref(false)
 const topicText = ref('')
 const preSurvey = ref({ ageRange: '', politicalLeaning: 0, topicFamiliarity: 0, initialStance: 0, discussionFrequency: '' })
@@ -508,7 +520,9 @@ const roundHandedOff = ref(false)
 function finishRound() {
   if (roundHandedOff.value || !haicUrl) return
   roundHandedOff.value = true
-  stage.value = 'done'
+  // Show a neutral "handing you to the coach" screen, NOT the standalone study's
+  // "you've completed the study" done screen (this fires between every round).
+  stage.value = 'handoff'
   const url = new URL(haicUrl)
   url.searchParams.set('game_code', gameCode)
   url.searchParams.set('pid', studyPid)
