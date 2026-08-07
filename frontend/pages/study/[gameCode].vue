@@ -481,12 +481,13 @@ const myRole = computed<'plus' | 'minus' | null>(() => {
   return p ? p.role : null
 })
 
-// How many real arguments the participant has made this round (confirmed, non-root,
-// non-empty tiles on their side). Drives the round-mode "arguments made" counter.
+// How many real arguments the participant has made this round: their own confirmed,
+// non-empty tiles. Includes their two starter reason tiles (their opening points) and
+// any tiles they add; excludes the topic tile and the opponent's tiles (player check).
 const myArgumentCount = computed(() => {
   if (!game.value || !myRole.value) return 0
   return Object.entries(game.value.gameBoard).filter(([id, t]) =>
-    !['0', '1', '2', '3', '4'].includes(id) &&
+    id !== '0' &&
     (t as Tile).player === myRole.value &&
     (t as Tile).confirmed &&
     !!((t as Tile).text && (t as Tile).text.trim())
