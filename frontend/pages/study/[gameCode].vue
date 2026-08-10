@@ -252,6 +252,7 @@
         :resolved-threads="resolvedThreads"
         :is-topic-revised="isTopicRevised"
         :threads="resolvedThreads"
+        :round-mode="isRound"
         @open-topic-revision="isTopicRevisionOpen = !isTopicRevisionOpen"
         @open-instructions="isInstructionsOpen = true"
       />
@@ -363,7 +364,7 @@
     <WinAlert v-if="isTopicRevised" winCondition="topic" :newTopic="game!.topic.text" />
     <WinAlert v-else-if="resolvedThreadsCount === 4" winCondition="threads" :threads="resolvedThreadsForAlert" />
     <InstructionsModal :is-open="isInstructionsOpen" @close="isInstructionsOpen = false" />
-    <OnboardingModal v-if="isTutorialOpen" :is-open="isTutorialOpen" :my-role="myRole" @close="isTutorialOpen = false" />
+    <OnboardingModal v-if="isTutorialOpen" :is-open="isTutorialOpen" :my-role="myRole" @close="closeTutorial" />
 
     <FactCheckModal
       v-if="activeEmojiResolution?.emoji === 'shared-facts' && myRole"
@@ -465,7 +466,19 @@ const isTopicRevised = ref(false)
 const topicProposal = ref('')
 const isTopicRevisionOpen = ref(false)
 const isInstructionsOpen = ref(false)
-const isTutorialOpen = ref(true)
+// Show the onboarding tutorial once per participant. In the multi-round study it
+// would otherwise pop up every round; remember it's been seen (keyed by the
+// participant id, i.e. the pid without its -rN round suffix).
+const tutorialSeenKey = 'pt_tutorial_seen_' + studyPid.replace(/-r\d+$/, '')
+const isTutorialOpen = ref(
+  isRound ? (typeof window !== 'undefined' && !localStorage.getItem(tutorialSeenKey)) : true
+)
+function closeTutorial() {
+  isTutorialOpen.value = false
+  if (isRound && typeof window !== 'undefined') {
+    try { localStorage.setItem(tutorialSeenKey, '1') } catch { /* ignore */ }
+  }
+}
 
 const boardPane = ref<HTMLElement | null>(null)
 const aiFeedback = ref<AiFeedback | null>(null)

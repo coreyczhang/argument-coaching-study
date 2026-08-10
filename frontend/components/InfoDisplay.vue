@@ -1,6 +1,17 @@
 <template>
     <div id="container"
         class="w-[10rem] p-4 border-2 border-gray-400 rounded-lg flex flex-col items-center text-center space-y-6 z-20 bg-neutral-white">
+        <!-- Round mode (study): the round ends when the participant hits Finish, not by
+             the game's win conditions — show the task instead of "paths to winning". -->
+        <template v-if="roundMode">
+            <h4 class="text-gold font-extrabold">YOUR TASK</h4>
+            <div class="flex flex-col space-y-3 items-center">
+                <h5 class="text-gray leading-snug">Build your strongest case and answer the AI's points.</h5>
+                <h5 class="text-gray leading-snug">When you've made your case, hit <span class="font-bold text-neutral-black">Finish round</span>.</h5>
+            </div>
+        </template>
+
+        <template v-else>
         <h4 class="text-gold font-extrabold">PATHS TO WINNING</h4>
         <div id="threads" class="flex flex-col space-y-4 items-center">
             <h5 class="text-gray">Resolve all threads</h5>
@@ -31,6 +42,7 @@
             <button @click="emit('open-topic-revision')"
                 class="flex items-center justify-center px-6 py-1 rounded-lg border-[1.5px]">Revise</button>
         </div>
+        </template>
         <div id="instructions" class="flex flex-col items-center -mt-2">
             <button @click="openInstructions"
                 class="flex items-center justify-center px-6 py-1 rounded-lg border-[1.5px]">Instructions</button>
@@ -55,6 +67,7 @@ const props = defineProps<{
     resolvedThreads: ('thumbs-up' | 'shared-facts' | 'wine' | 'scale' | null)[]
     resolvedThreadsCount: number
     isTopicRevised: boolean
+    roundMode?: boolean
 }>()
 
 const resolvedThreadsDisplay = computed(() => {
