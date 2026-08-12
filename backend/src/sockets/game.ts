@@ -263,6 +263,26 @@ export default function gameplayHandlers(io: Server, socket: Socket) {
           text: normalizedText,
         });
 
+        // AI co-player FIRST so the opponent responds quickly. It must not wait behind
+        // the (slower, and in round mode invisible) evaluation call below — otherwise
+        // the participant finishes the round before the opponent ever replies.
+        try {
+          if (userId !== AI_USER_ID) {
+            const g = await fetchGameSnapshot(gameId);
+            const board = (g?.gameBoard ?? {}) as Record<string, Tile>;
+            const humanTile = board[tileId];
+            if ((g as any)?.isAiGame && humanTile?.player) {
+              const aiRole = humanTile.player === "plus" ? "minus" : "plus";
+              const topic = (g as any)?.topic?.text ?? "";
+              await placeAiReply({
+                io, gameCode, gameId, board, humanTileId: tileId, aiRole, topic,
+              });
+            }
+          }
+        } catch (coErr) {
+          console.error("co-player error:", coErr);
+        }
+
         try {
           const game = await fetchGameSnapshot(gameId);
           const confirmedTile = game?.gameBoard?.[tileId];
@@ -317,26 +337,6 @@ export default function gameplayHandlers(io: Server, socket: Socket) {
           console.error("ai evaluation error:", aiErr);
           // Always resolve the reading indicator even on error
           socket.emit("aiFeedback", { errors_found: false, display_feedback: false });
-        }
-
-        // Scripted AI co-player: in a solo-vs-AI round, reply to the human's tile
-        // with a canned rebuttal so the round feels interactive without the agent.
-        // (When the agent is funded, the live co-player does this instead.)
-        try {
-          if (userId !== AI_USER_ID) {
-            const game = await fetchGameSnapshot(gameId);
-            const board = (game?.gameBoard ?? {}) as Record<string, Tile>;
-            const humanTile = board[tileId];
-            if ((game as any)?.isAiGame && humanTile?.player) {
-              const aiRole = humanTile.player === "plus" ? "minus" : "plus";
-              const topic = (game as any)?.topic?.text ?? "";
-              await placeAiReply({
-                io, gameCode, gameId, board, humanTileId: tileId, aiRole, topic,
-              });
-            }
-          }
-        } catch (coErr) {
-          console.error("scripted co-player error:", coErr);
         }
       } catch (err) {
         console.error("confirmTile error:", err);
