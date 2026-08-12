@@ -1305,6 +1305,8 @@ Rules:
   GOOD: "Clear rules turn phones into tools."   ← 35 chars ✓
   GOOD: "Bans remove distractions in class."    ← 34 chars ✓
 - No question marks. No fallacies.
+- Argue in good faith: make the strongest FAIR point for your side. No cheap shots,
+  no straw-manning, no exaggeration — a reasonable sparring partner, not a troll.
 - Sound like a thoughtful student, not a textbook.
 - Return your argument text only — no quotes, no explanation.
 

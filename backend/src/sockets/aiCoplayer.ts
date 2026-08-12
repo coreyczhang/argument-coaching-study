@@ -1,9 +1,9 @@
-// Scripted AI co-player for e18 study rounds.
+// AI co-player for e18 study rounds.
 //
-// When credits fund the real agent, the LLM co-player generates live rebuttals
-// (see startAiGame + the agent pipeline). Until then, this places canned rebuttal
-// tiles so a round vs. the AI still feels interactive. It writes the same tile
-// shape the human client writes, so the board renders identically.
+// Live-first: it asks the funded agent's /co-player/turn for a real, in-good-faith
+// rebuttal (a "reasonable sparring partner" — no fallacies, strongest fair case).
+// If the agent is unavailable it falls back to a canned rebuttal so the round always
+// works. Either way it writes the same tile shape the human client writes.
 
 import { Server } from "socket.io";
 import { UpdateCommand } from "@aws-sdk/lib-dynamodb";
@@ -12,7 +12,8 @@ import { Tile } from "../models/Tile";
 
 export const AI_USER_ID = "ai-coplayer";
 const MAX_AI_REPLIES = 4; // don't overrun the board
-const REPLY_DELAY_MS = 1400; // feel like it's "thinking"
+const REPLY_DELAY_MS = 500; // brief "thinking" beat (the agent call adds its own latency)
+const PT_AGENT_URL = process.env.PT_AGENT_URL || "http://127.0.0.1:8000";
 
 // Unit-cell offsets by edge index — must match the frontend (useGameBoard.ts).
 const OFFSETS: Array<{ x: number; y: number }> = [
@@ -76,34 +77,90 @@ function pickFreeEdge(
   return null;
 }
 
+/** Tiles that still have at least one free edge — where the co-player may attach a child. */
+function viableParentIds(board: Record<string, Tile>): string[] {
+  const { occ, pos } = boardLayout(board);
+  const out: string[] = [];
+  for (const id of Object.keys(board)) {
+    const ppos = pos[id];
+    if (!ppos) continue;
+    if (OFFSETS.some((off) => !occ.has(`${ppos.x + off.x},${ppos.y + off.y}`))) out.push(id);
+  }
+  return out;
+}
+
+/** Ask the live agent for a reasonable, good-faith rebuttal. Returns null on any failure. */
+async function liveCoPlayerTile(
+  board: Record<string, Tile>,
+  topic: string,
+  aiRole: "plus" | "minus"
+): Promise<{ parentId: string; text: string } | null> {
+  try {
+    const res = await fetch(`${PT_AGENT_URL}/co-player/turn`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        game_board: board,
+        topic,
+        ai_role: aiRole,
+        viable_parent_ids: viableParentIds(board),
+      }),
+      signal: AbortSignal.timeout(25000),
+    });
+    if (!res.ok) return null;
+    const d: any = await res.json();
+    const parentId = d?.parent_id;
+    const text = (d?.text || "").toString().trim();
+    if (parentId && text && board[parentId]) return { parentId, text };
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 /**
- * Place one scripted rebuttal as a child of the human's just-confirmed tile.
- * No-op if the board is full of AI replies or there's no free edge.
+ * Place one co-player rebuttal after the participant confirms a tile. Tries the live
+ * agent (reasonable sparring partner); falls back to a canned rebuttal off the human's
+ * tile. No-op if the board is full of AI replies or there's no free edge.
  */
-export async function placeScriptedAiReply(opts: {
+export async function placeAiReply(opts: {
   io: Server;
   gameCode: string;
   gameId: string;
   board: Record<string, Tile>;
   humanTileId: string;
   aiRole: "plus" | "minus";
+  topic: string;
 }): Promise<void> {
-  const { io, gameCode, gameId, board, humanTileId, aiRole } = opts;
+  const { io, gameCode, gameId, board, humanTileId, aiRole, topic } = opts;
 
   const priorReplies = Object.values(board).filter((t) => (t as any)._ai).length;
   if (priorReplies >= MAX_AI_REPLIES) return;
-  if (!board[humanTileId]) return;
 
-  const edge = pickFreeEdge(board, humanTileId);
+  await new Promise((r) => setTimeout(r, REPLY_DELAY_MS));
+
+  // Live-first: the agent chooses which tile to answer and what to say.
+  let parentId: string | null = null;
+  let text: string | null = null;
+  const live = await liveCoPlayerTile(board, topic, aiRole);
+  if (live) {
+    parentId = live.parentId;
+    text = live.text;
+  } else if (board[humanTileId]) {
+    parentId = humanTileId;
+    text = REBUTTALS[priorReplies % REBUTTALS.length];
+  }
+  if (!parentId || !text) return;
+
+  const edge = pickFreeEdge(board, parentId);
   if (edge == null) return;
 
   const maxId = Object.keys(board).reduce((m, id) => Math.max(m, parseInt(id) || 0), 0);
   const newTileId = (maxId + 1).toString();
-  const text = REBUTTALS[priorReplies % REBUTTALS.length];
 
   const tile: Tile & { _ai?: boolean } = {
     tileId: newTileId,
-    parentId: humanTileId,
+    parentId,
     parentEdge: edge,
     children: [],
     player: aiRole,
@@ -113,15 +170,13 @@ export async function placeScriptedAiReply(opts: {
     _ai: true,
   };
 
-  await new Promise((r) => setTimeout(r, REPLY_DELAY_MS));
-
   await ddbClient.send(
     new UpdateCommand({
       TableName: "Games",
       Key: { gameId },
       UpdateExpression:
         "SET gameBoard.#new = :tile, gameBoard.#parent.children = list_append(gameBoard.#parent.children, :childId)",
-      ExpressionAttributeNames: { "#new": newTileId, "#parent": humanTileId },
+      ExpressionAttributeNames: { "#new": newTileId, "#parent": parentId },
       ExpressionAttributeValues: { ":tile": tile, ":childId": [newTileId] },
     })
   );

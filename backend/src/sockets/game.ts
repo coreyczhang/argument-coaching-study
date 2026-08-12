@@ -4,7 +4,7 @@ import { GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { ddbClient } from "../dbClient";
 import { Tile } from "../models/Tile";
 import type { AiEvaluationRecord, GameActionType } from "../models/Game";
-import { placeScriptedAiReply, AI_USER_ID } from "./aiCoplayer";
+import { placeAiReply, AI_USER_ID } from "./aiCoplayer";
 
 async function updateWithOptionalLog(opts: {
   gameId: string;
@@ -329,8 +329,9 @@ export default function gameplayHandlers(io: Server, socket: Socket) {
             const humanTile = board[tileId];
             if ((game as any)?.isAiGame && humanTile?.player) {
               const aiRole = humanTile.player === "plus" ? "minus" : "plus";
-              await placeScriptedAiReply({
-                io, gameCode, gameId, board, humanTileId: tileId, aiRole,
+              const topic = (game as any)?.topic?.text ?? "";
+              await placeAiReply({
+                io, gameCode, gameId, board, humanTileId: tileId, aiRole, topic,
               });
             }
           }
