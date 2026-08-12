@@ -1296,7 +1296,9 @@ Argument angle: {angle}
 
 Rules:
 - ONE grammatically complete sentence. Subject + verb + full object/complement. Period at the end.
-- Hard limit: {TILE_TEXT_MAX} characters. Aim for 35–50 characters — SHORT sentences are safer.
+- Hard limit: {TILE_TEXT_MAX} characters. Write a COMPLETE sentence that fits — aim for
+  35–50 characters. If your point won't fit whole, make a simpler point that does. Never
+  end on a fragment (no trailing "instead", "reduce", "without", "and", etc.).
 - CRITICAL: Every sentence must be fully closed. When in doubt, write shorter.
   BAD: "Phones prevent essential digital"       ← dangling adjective, no noun
   BAD: "stricter discipline likely drives"      ← verb without object
@@ -1323,22 +1325,34 @@ Return JSON only:
     data = safe_json(resp.content[0].text)
     text = (data.get("text") or "").strip()
     if len(text) > TILE_TEXT_MAX:
-        # Truncate at last word boundary; strip trailing prepositions, conjunctions,
-        # and adjectives-without-nouns so the result reads as a complete thought.
-        _DANGLERS = {
-            # prepositions / conjunctions
-            "and","or","but","the","a","an","in","on","at","to","for","of","with",
-            "by","from","because","so","yet","nor","as","into","onto","than","that",
-            # adjectives that strandedly end sentences after truncation
-            "essential","digital","critical","academic","social","important",
-            "necessary","valuable","useful","effective","significant","educational",
-            "personal","potential","harmful","negative","positive","additional",
-        }
-        text = text[:TILE_TEXT_MAX].rsplit(" ", 1)[0].rstrip(".,;:")
-        words = text.split()
-        while words and words[-1].lower() in _DANGLERS:
-            words.pop()
-        text = " ".join(words)
+        import re as _re
+        # Prefer the last COMPLETE sentence that fits — never a mid-sentence fragment.
+        window = text[:TILE_TEXT_MAX]
+        ends = list(_re.finditer(r"[.!?]", window))
+        if ends:
+            text = window[: ends[-1].end()].strip()
+        else:
+            # No full sentence fits: trim to a word boundary, then drop trailing words
+            # that leave a dangling thought (prepositions, conjunctions, adverbs, bare
+            # adjectives, and common transitive verbs with no object).
+            _DANGLERS = {
+                "and","or","but","the","a","an","in","on","at","to","for","of","with",
+                "by","from","because","so","yet","nor","as","into","onto","than","that",
+                "instead","however","therefore","also","too","still","though","rather",
+                "otherwise","thus","hence","meanwhile","anyway","regardless","while","when",
+                "essential","digital","critical","academic","social","important","necessary",
+                "valuable","useful","effective","significant","educational","personal",
+                "potential","harmful","negative","positive","additional","lifelong","lasting",
+                "replace","reduce","reducing","cause","causing","prevent","preventing",
+                "create","creating","increase","increasing","without","not",
+            }
+            words = window.rsplit(" ", 1)[0].rstrip(".,;:").split()
+            while words and words[-1].lower() in _DANGLERS:
+                words.pop()
+            text = " ".join(words)
+    # Always end as a complete thought with terminal punctuation.
+    if text and text[-1] not in ".!?":
+        text = text.rstrip(",;:") + "."
     return {"text": text}
 
 
