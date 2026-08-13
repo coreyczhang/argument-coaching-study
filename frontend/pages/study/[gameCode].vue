@@ -352,11 +352,11 @@
     <div v-if="isRound && !roundHandedOff" class="fixed z-40 bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 rounded-full border border-[#e8ddd6] bg-white/95 px-4 py-2.5 shadow-[0_6px_20px_rgba(59,52,47,0.16)] backdrop-blur">
       <span class="text-xs text-[#8d8379]">
         <span class="font-semibold text-[#3b342f]">{{ myArgumentCount }}</span>
-        argument{{ myArgumentCount === 1 ? '' : 's' }} made{{ myArgumentCount < 2 ? ' · try to make at least a couple' : ' · finish whenever you\'re ready' }}
+        of {{ minArguments }} argument{{ minArguments === 1 ? '' : 's' }} made{{ myArgumentCount < minArguments ? ' · make ' + (minArguments - myArgumentCount) + ' more to finish' : ' · finish whenever you\'re ready' }}
       </span>
       <button
         class="rounded-full bg-[#3b342f] px-5 py-2 text-sm font-semibold text-white hover:bg-[#2a2521] disabled:opacity-40 disabled:cursor-not-allowed"
-        :disabled="myArgumentCount < 1"
+        :disabled="myArgumentCount < minArguments"
         @click="finishRound"
       >Finish round →</button>
     </div>
@@ -424,6 +424,9 @@ const studyPid = rawPid || `anon-${Math.random().toString(36).slice(2, 8)}`
 // hand back to HAIC (which shows the between-round coach). Coaching is between rounds,
 // so there is never in-play AI feedback in round mode — force CONTROL board behavior.
 const isRound = (route.query.mode as string) === 'round'
+// Minimum arguments a participant must make before they can finish a round (so each
+// round yields enough data to score). Default 3; tunable per study via ?minArgs=.
+const minArguments = Math.max(1, Number(route.query.minArgs) || 3)
 const studyCondition = isRound ? 'CONTROL' : ((route.query.condition as string) || 'CONTROL')
 const haicUrl = (route.query.haicUrl as string) || ''
 

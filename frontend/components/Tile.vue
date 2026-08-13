@@ -39,17 +39,17 @@
       </p>
 
       <textarea v-else-if="canEditStandardTile && !demoMode" ref="editor" :id="`reason-${tile.tileId}`" v-model="draft"
-        :readonly="disableInteractions" @input="onInput" @keyup.enter="onConfirm" @blur="onEditorBlur"
+        :readonly="disableInteractions" @paste.prevent @input="onInput" @keyup.enter="onConfirm" @blur="onEditorBlur"
         :placeholder="disableInteractions ? 'Wait for the coach to finish…' : ''"
         class="bg-transparent text-center focus:outline-none w-3/4 resize-none py-8 overflow-hidden disabled:opacity-50" />
 
       <textarea v-else-if="canEditInDemo" ref="editor" :id="`reason-${tile.tileId}`" v-model="draft"
-        @focus="isEditing = true" @blur="isEditing = false" @input="onInput" @keydown.enter.prevent="onConfirm"
+        @focus="isEditing = true" @blur="isEditing = false" @paste.prevent @input="onInput" @keydown.enter.prevent="onConfirm"
         placeholder="Type here and press Enter"
         class="bg-transparent text-center focus:outline-none w-3/4 resize-none py-8 overflow-hidden" />
 
       <textarea v-else-if="tile.player === userRole && tile.ruleCard && !tile.revised" ref="editor"
-        :id="`reason-${tile.tileId}`" v-model="draft" @input="onInput" @keyup.enter="onConfirm" :placeholder="tile.text"
+        :id="`reason-${tile.tileId}`" v-model="draft" @paste.prevent @input="onInput" @keyup.enter="onConfirm" :placeholder="tile.text"
         class="bg-transparent text-red-600 text-center focus:outline-none w-3/4 resize-none py-8 overflow-hidden" />
       <p v-else-if="tile.text" class="text-gray-800 text-center text-sm leading-snug px-3 line-clamp-5">
         {{ tile.text }}
