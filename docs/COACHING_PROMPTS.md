@@ -46,7 +46,24 @@ constructive_stance:{...}, feedback:"1-2 forward-looking tips for the next round
    the generic-feeling part. Easy change: generate it from the argument itself in the same
    call that produces the critique + rewrite, so all three point-level pieces are specific.
 
-## Why three dimensions (and why three)
+## Six dimensions scored, three shown (mirrors the empathic framework)
+
+Per the RPG paper (arxiv 2603.15245), the preregistered analysis scored **six** dimensions
+— three prescriptive (helpful) and three proscriptive (counterproductive) — with the
+overall score = sum(helpful) − sum(counterproductive). Only a subset was **shown** to
+participants so scores don't overwhelm and coaching shifts strategy rather than one number.
+
+We mirror that. The judge now scores **six** (draft, pending Aakriti):
+- **Helpful (shown):** reasoning quality, engagement, constructive stance
+- **Counterproductive (analysis-only):** fallacies, evasion, hostility
+
+`analysis_overall = (reasoning + engagement + constructive) − (fallacies + evasion + hostility)`
+is stored per round for analysis; the coach page shows only the three helpful dims. The
+three helpful map to the empathic prescriptive set; the three counterproductive map to the
+proscriptive set and to the game's existing error screen (overgeneralizing/false-cause →
+fallacies, whataboutism/irrelevant → evasion, personal-attack/straw-man → hostility).
+
+## Why these (and open questions)
 
 They mirror the empathic-communication (RPG) rubric we're replicating — a one-to-one map:
 validating emotions → constructive stance, encouraging elaboration → engagement,
