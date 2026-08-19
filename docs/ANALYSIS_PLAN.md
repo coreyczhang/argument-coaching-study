@@ -1,105 +1,130 @@
-# Analysis Plan — Argument-Coaching Study (e18)
+# Preregistered Analysis Plan
 
-Draft for preregistration. This freezes what we test and how, *before* the full
-run, so the confirmatory tests are locked and anything else is labeled
-exploratory. It mirrors the RPG paper's preregistered structure (six scored
-dimensions, helpful minus counterproductive composite, a subset shown to
-participants) applied to argumentation instead of empathy.
+**Study:** Point Taken — Argument-Coaching Experiment
+**Authors:** Corey Zhang, Aakriti Kumar, Steven Franconeri
+**Status:** Frozen prior to full data collection. The pilot (*n* = 5) is for
+pipeline validation and timing only and is not used for inference.
 
-Status: DRAFT for Aakriti/Steve review. Pilot (n=5) is for pipeline validation
-only, not inference. Freeze this file, then run the full study.
+This plan specifies the confirmatory analyses in advance, following the
+preregistration practice of the source studies (Kumar et al., arXiv:2603.15245;
+Kumar et al., *Nature Machine Intelligence*, 2025). It mirrors the six-dimension
+scoring (three prescriptive, three proscriptive) of the practice-plus-coaching
+paradigm, adapted from empathic communication to argumentation.
 
 ---
 
 ## 1. Design
 
-- **Type:** between-subjects, 2 conditions, randomized 50/50 at first load.
-  - **Control:** three rounds of the argument game, no coach.
-  - **AICoach:** same three rounds + the between-round LLM coach.
-- **Task:** each participant argues solo against a live, good-faith LLM
-  co-player, three rounds, one topic per round (topic order randomized per
-  participant to unconfound topic from round).
-- **Unit:** participant. Each participant contributes one score per round.
+A between-subjects experiment with two conditions, randomly assigned 50/50 on
+first entry:
+
+- **Control:** three rounds of the argument game, no coaching.
+- **Treatment (AICoach):** the same three rounds, with a between-round coaching
+  interface.
+
+Each participant argues against a live, good-faith LLM co-player rather than
+another participant, enabling asynchronous single-participant collection. Each
+round presents one topic; topic order is randomized per participant so that topic
+is not confounded with round. The unit of analysis is the participant, who
+contributes one score per round.
 
 ## 2. Measures
 
-Each round is scored by an LLM judge on **six dimensions, 1-5**:
-- **Helpful (shown to AICoach participants):** reasoning_quality, engagement,
-  constructive_stance.
-- **Counterproductive (analysis-only, never shown):** fallacies, evasion,
+Each round is scored by an LLM judge on six dimensions, each 1–5:
+
+- **Helpful (shown to treatment participants):** reasoning quality, engagement,
+  constructive stance.
+- **Counterproductive (analysis only, not shown):** fallacies, evasion,
   hostility.
 
 Derived per round:
-- `composite` = mean of the three helpful dimensions (1-5). Primary DV.
-- `analysis_overall` = sum(helpful) − sum(counterproductive). Full six-dim
-  measure, mirrors RPG's prescriptive-minus-proscriptive score.
 
-Also collected: baseline survey (stance on each topic + four disagreement-style
-self-ratings), exit survey, rewrites, and any ask-the-coach exchanges.
+- `composite` = mean of the three helpful dimensions (1–5). **Primary dependent
+  measure.**
+- `analysis_overall` = Σ(helpful) − Σ(counterproductive). The full six-dimension
+  score, mirroring the prescriptive-minus-proscriptive composite of the source
+  paradigm.
+
+Additional measures: a baseline survey (topic stances and four disagreement-style
+items) and an exit survey.
 
 ## 3. Hypotheses and confirmatory tests
 
-**H1 (primary).** AICoach participants improve in argument quality across
-rounds more than Control.
+**H1 (primary).** Treatment participants improve in argument quality across rounds
+to a greater extent than control participants.
+
 - **Model:** linear mixed-effects,
-  `composite ~ condition * round_c + (1 | participant)`, where `round_c` is
-  round centered (rounds coded 0,1,2). The **condition × round** interaction is
-  the confirmatory test; a positive interaction supports H1.
-- **Effect estimate to report:** the interaction coefficient (extra
-  points-per-round for AICoach) with 95% CI.
-- **Fallback if the mixed model doesn't converge on the pilot n:** two-sample
-  Welch t-test on each participant's round-1 → round-3 change score
-  (difference-in-differences). This is what `analyze_e18.py` computes by default.
+  `composite ~ condition * round_c + (1 | participant)`, with `round_c` the
+  round centered (0, 1, 2). The **condition × round** interaction is the
+  confirmatory test; a positive coefficient supports H1, reported with its 95%
+  confidence interval.
+- **Fallback (prespecified):** if the mixed model does not converge at the
+  available sample size, a Welch two-sample *t*-test on each participant's
+  round-1-to-round-3 change score (a difference-in-differences contrast).
 
-**H2 (secondary).** The effect holds on the full six-dimension measure.
-- Same model on `analysis_overall`.
+**H2–H3 (secondary).** The same model is applied to `analysis_overall` and to the
+summed counterproductive score, testing whether coaching reduces counterproductive
+behaviors across rounds relative to control.
 
-**H3 (secondary, mechanism).** Coaching reduces counterproductive behaviors
-(fallacies, evasion, hostility) across rounds relative to Control.
-- Same model on the summed counterproductive score.
+**H4 (exploratory).** Per-dimension trajectories, examined descriptively to
+identify which dimensions are most affected. Not corrected for multiple
+comparisons; labeled exploratory.
 
-**H4 (exploratory).** Per-dimension effects — which of the three helpful
-dimensions moves most. Reported descriptively, not corrected for multiplicity.
+## 4. LLM-as-judge validation
 
-## 4. Rubric validation (measurement, runs alongside)
+The primary outcome depends on the LLM judge, which is validated rather than
+assumed, following Kumar et al. (*Nature Machine Intelligence*, 2025). Expert
+annotations do not yet exist for this task and will be constructed. Following the
+pilot, an expert coder (and, where feasible, a second coder for inter-rater
+reliability) will score a random subsample of approximately 20–30 rounds on the
+same six-dimension rubric. Agreement between the LLM and human coders
+(Krippendorff's α) is computed per dimension and benchmarked against human–human
+agreement on the overlapping subset. Dimensions with weak agreement have their
+anchors revised before the confirmatory analyses are conducted. Validation is
+performed on pilot data, prior to the full run.
 
-The whole outcome rests on the LLM judge, so we validate it rather than assume
-it. Per Aakriti's eval-framework paper:
-- Hand-code a random subsample of rounds (target ~20-30 rounds, two coders on an
-  overlapping subset) on the same six-dimension 1-5 rubric.
-- Compute **Krippendorff's alpha** (or weighted Cohen's kappa) between the LLM
-  scores and the human codes, per dimension.
-- Benchmark against **human-human** agreement on the overlap subset — the LLM
-  should approach the coder-coder ceiling, not be judged against perfection.
-- If agreement is weak on a dimension, that dimension's anchors get revised (or
-  it moves to exploratory) before the confirmatory tests are trusted.
+## 5. Prespecified exclusions
 
-## 5. Exclusions (prespecified)
+A participant is excluded if they:
 
-- Did not complete all three rounds.
-- Failed an attention/effort check (e.g., empty or single-character arguments
-  across a whole round).
-- Duplicate Prolific ID.
-- Technical failure (coach/opponent errored and returned canned fallback for a
-  scored round — flagged via `model_name` / rationale in the export).
+- do not complete all three rounds;
+- fail an effort check (e.g., empty or single-character arguments across an entire
+  round);
+- submit a duplicate Prolific identifier; or
+- have any scored round that reverted to fallback text owing to a coach or
+  opponent error (flagged via the exported `model_name` field).
 
-State N excluded and reasons in the report.
+The number of exclusions and their reasons are reported.
 
-## 6. Sample and power
+## 6. Sample and inference
 
-- **Pilot:** n=5 (Prolific), pipeline + timing check only, no inference.
-- **Full:** target ~30/arm (60 total) for the pilot-scale URG report; treat as
-  estimation of the effect size + CI, not a powered confirmatory test. A
-  formal power analysis for a confirmatory follow-up uses the effect size
-  observed here.
+- **Pilot:** *n* = 5, for pipeline and timing validation only; not used for
+  inference.
+- **Full run:** approximately 30 participants per condition. At this scale the
+  study is treated as an estimate of the effect size and its confidence interval
+  rather than a fully powered confirmatory test; a formal power analysis for any
+  subsequent confirmatory study is based on the effect observed here.
 
-## 7. What's confirmatory vs exploratory
+## 7. Confirmatory versus exploratory
 
-- **Confirmatory:** H1 (and its model), the exclusion rules, the primary DV.
-- **Exploratory:** H2-H4, per-dimension breakdowns, exit-survey correlations,
-  baseline-style moderators. Labeled as such in the writeup.
+- **Confirmatory:** H1 and its model, the prespecified exclusions, and the primary
+  dependent measure.
+- **Exploratory:** H2–H4, per-dimension breakdowns, and any survey-based
+  moderator analyses. Labeled as such in the report.
 
 ## 8. Deviations
 
-Any change to this plan after preregistration is logged here with date and
-reason.
+Any departure from this plan after preregistration is recorded here with the date
+and rationale.
+
+## 9. References
+
+- Kumar et al. *Practicing with Language Models Cultivates Human Empathic
+  Communication.* arXiv:2603.15245. Code/data:
+  https://github.com/aakriti1kumar/replication-data-and-code-practicing-with-llms-cultivates-human-empathic-communication
+  · Zenodo https://doi.org/10.5281/zenodo.20703371
+- Kumar et al. *When Large Language Models are Reliable for Judging Empathic
+  Communication.* *Nature Machine Intelligence* (s42256-025-01169-6);
+  arXiv:2506.10150. Code/data:
+  https://github.com/aakriti1kumar/replication-data-and-code-when-LLMs-reliable-empathic-communication
+  · Zenodo https://doi.org/10.5281/zenodo.17230987
