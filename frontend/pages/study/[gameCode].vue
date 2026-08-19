@@ -352,11 +352,11 @@
     <div v-if="isRound && !roundHandedOff" class="fixed z-40 bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 rounded-full border border-[#e8ddd6] bg-white/95 px-4 py-2.5 shadow-[0_6px_20px_rgba(59,52,47,0.16)] backdrop-blur">
       <span class="text-xs text-[#8d8379]">
         <span class="font-semibold text-[#3b342f]">{{ myArgumentCount }}</span>
-        of {{ minArguments }} argument{{ minArguments === 1 ? '' : 's' }} made{{ myArgumentCount < minArguments ? ' · make ' + (minArguments - myArgumentCount) + ' more to finish' : ' · finish whenever you\'re ready' }}
+        of {{ minArguments }} argument{{ minArguments === 1 ? '' : 's' }} made<template v-if="myArgumentCount < minArguments"> · make {{ minArguments - myArgumentCount }} more to finish</template><template v-else-if="myReplyCount < minReplies"> · reply to your opponent {{ minReplies - myReplyCount }} more time{{ (minReplies - myReplyCount) === 1 ? '' : 's' }} to finish</template><template v-else> · finish whenever you're ready</template>
       </span>
       <button
         class="rounded-full bg-[#3b342f] px-5 py-2 text-sm font-semibold text-white hover:bg-[#2a2521] disabled:opacity-40 disabled:cursor-not-allowed"
-        :disabled="myArgumentCount < minArguments"
+        :disabled="!canFinishRound"
         @click="finishRound"
       >Finish round →</button>
     </div>
@@ -427,6 +427,10 @@ const isRound = (route.query.mode as string) === 'round'
 // Minimum arguments a participant must make before they can finish a round (so each
 // round yields enough data to score). Default 3; tunable per study via ?minArgs=.
 const minArguments = Math.max(1, Number(route.query.minArgs) || 3)
+// Minimum arguments that must be direct replies to the opponent (not standalone
+// points), so both sides actually engage and the engagement dimension is
+// measurable. Default 1; tunable per study via ?minReplies.
+const minReplies = Math.max(0, Number(route.query.minReplies ?? 1))
 const studyCondition = isRound ? 'CONTROL' : ((route.query.condition as string) || 'CONTROL')
 const haicUrl = (route.query.haicUrl as string) || ''
 
@@ -521,6 +525,30 @@ const myArgumentCount = computed(() => {
     !!((t as Tile).text && (t as Tile).text.trim())
   ).length
 })
+
+const opponentRole = computed<'plus' | 'minus' | null>(() =>
+  myRole.value === 'plus' ? 'minus' : myRole.value === 'minus' ? 'plus' : null
+)
+
+// How many of the participant's own tiles are direct replies to an opponent tile
+// (their parent belongs to the opponent's role). This is the "engaged with the
+// other side" count, distinct from standalone points.
+const myReplyCount = computed(() => {
+  if (!game.value || !myRole.value || !opponentRole.value) return 0
+  const board = game.value.gameBoard
+  return Object.entries(board).filter(([id, t]) => {
+    const tile = t as Tile
+    if (id === '0' || tile.player !== myRole.value) return false
+    if (!tile.confirmed || !(tile.text && tile.text.trim())) return false
+    const parent = tile.parentId ? (board[tile.parentId] as Tile | undefined) : undefined
+    return !!parent && parent.player === opponentRole.value
+  }).length
+})
+
+// Round is finishable once both minimums are met.
+const canFinishRound = computed(() =>
+  myArgumentCount.value >= minArguments && myReplyCount.value >= minReplies
+)
 
 // Game ends: round mode hands back to HAIC; standalone study goes to its post-survey.
 watch([isTopicRevised, resolvedThreadsCount], ([revised, count]) => {
