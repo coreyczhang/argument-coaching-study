@@ -237,7 +237,9 @@ Prolific ID; a scored round that fell back to canned text because the coach or
 opponent errored.
 
 The analysis runs from \texttt{analysis/e18\_analysis.ipynb} on the study's data
-export.
+export. I set the repo up the same way as the replication repos for the two
+papers we are building on: one analysis notebook plus a data export, with the
+preregistered plan written down before the run. See Section~\ref{sec:refs}.
 
 \section{Results}
 \label{sec:results}
@@ -295,5 +297,31 @@ effect is worth a powered follow-up. Keep it honest about the pilot n.
   \item Model choice for the judge. The eval-framework paper used Gemini 2.5 Pro
   and Claude 3.7 Sonnet; we are on Claude Sonnet 4.5.
 \end{enumerate}
+
+\section{What we are building on}
+\label{sec:refs}
+
+The design and analysis follow two of Aakriti's papers directly. I read both and
+matched our structure to their replication repos.
+
+\begin{itemize}
+  \item \textbf{Practicing with Language Models Cultivates Human Empathic
+  Communication} (arXiv:2603.15245). The practice-plus-coach paradigm and the
+  preregistered six-dimension (prescriptive minus proscriptive) scoring we
+  mirror. Code and data:
+  \url{https://github.com/aakriti1kumar/replication-data-and-code-practicing-with-llms-cultivates-human-empathic-communication};
+  Zenodo \url{https://doi.org/10.5281/zenodo.20703371}. Their \texttt{analysis.ipynb}
+  plus \texttt{data/} layout is what our \texttt{analysis/e18\_analysis.ipynb} follows.
+  \item \textbf{When Large Language Models are Reliable for Judging Empathic
+  Communication} (Nature Machine Intelligence, s42256-025-01169-6;
+  arXiv:2506.10150). The basis for our LLM-as-judge validation: hand-code a
+  sample, compare against the LLM with an agreement statistic, benchmark to
+  human-human agreement. Code and data:
+  \url{https://github.com/aakriti1kumar/replication-data-and-code-when-LLMs-reliable-empathic-communication};
+  Zenodo \url{https://doi.org/10.5281/zenodo.17230987}.
+\end{itemize}
+
+Following those, our confirmatory analysis is preregistered (this document,
+Section~\ref{sec:analysis}) before the full run.
 
 \end{document}
