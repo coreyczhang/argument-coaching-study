@@ -1,0 +1,256 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyvrb}
+\usepackage[hidelinks]{hyperref}
+
+\title{Point Taken: Argument-Coaching Study}
+\author{Corey Zhang, Aakriti Kumar, \& Steven Franconeri}
+\date{August 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{What this document is}
+
+This is the single place where I keep the design, the measures, the prompts, and
+the analysis plan for the argument-coaching study, so Aakriti, Steve, and I are
+all reading the same thing instead of chasing separate files. The prompts here
+are the exact ones running in the live study, not paraphrases. When I change a
+decision I update it here and note it in Section~\ref{sec:open}.
+
+Two layers live in this project. The first is the \textbf{experiment}: do people
+argue better across rounds when they get an AI coach between rounds. The second
+is the \textbf{point-level coaching} that the coach uses (the per-tile fallacy
+feedback), which I wrote up first and kept in Section~\ref{sec:pointlevel}. Most
+of this document is now about the experiment, since that is what we are running.
+
+\section{Study design}
+
+\begin{itemize}
+  \item \textbf{Type:} between-subjects, two conditions, randomized 50/50 the
+  first time a participant loads the study. Between-subjects means each person is
+  in one condition only. Nobody does both, and there is no pairing of two humans.
+  \item \textbf{Control:} three rounds of the argument game, no coach.
+  \item \textbf{AICoach:} the same three rounds plus the between-round coach.
+  \item \textbf{Opponent:} each participant argues solo against a live LLM
+  co-player, not another participant. That is why we can run it on Prolific with
+  single participants and no scheduling.
+  \item \textbf{Topics:} one topic per round, topic order randomized per
+  participant so topic is not confounded with round.
+\end{itemize}
+
+I chose between-subjects so the coach never touches the control group. I chose a
+reasonable, good-faith co-player (not an adversarial one) because I want to
+measure how well someone argues against a fair partner. An adversarial partner
+would be testing whether people resist bad-faith tactics, which is a different
+question than the one we are asking.
+
+\section{The game: length and minimum interaction}
+\label{sec:length}
+
+This is one of the design choices Aakriti asked me to think through. The goal is
+enough interaction per round to (a) give the judge a real sample to score and
+(b) give the coach something to work with, without making the study so long that
+Prolific participants drop out.
+
+My current plan: a round is defined by \textbf{exchanges}, not just standalone
+tiles. Each round requires at least three participant turns, and at least one or
+two of those turns has to be a direct response to the co-player's reply rather
+than a fresh unrelated point. That guarantees both sides actually engage, which
+is what makes the \textit{engagement} dimension measurable. Across three rounds
+that is roughly nine to twelve participant messages, which should land around
+15--20 minutes. The exact minimums are still an open number I want to settle
+(Section~\ref{sec:open}); in the current build the finish gate is three
+arguments per round.
+
+\section{What we measure}
+\label{sec:rubric}
+
+Each round is scored by an LLM judge on \textbf{six dimensions, 1--5}, following
+the RPG paper's preregistered structure (three prescriptive and three
+proscriptive dimensions, with the overall score being prescriptive minus
+proscriptive). Only the three helpful dimensions are shown to AICoach
+participants. I show a subset on purpose: if people saw all six they would
+optimize a single number, and the point is to shift how they argue, not to chase
+a score.
+
+\begin{itemize}
+  \item \textbf{Helpful (shown):} reasoning quality, engagement, constructive
+  stance.
+  \item \textbf{Counterproductive (analysis only, never shown):} fallacies,
+  evasion, hostility.
+\end{itemize}
+
+Derived per round:
+\begin{itemize}
+  \item \texttt{composite} = mean of the three helpful dimensions. This is the
+  primary outcome.
+  \item \texttt{analysis\_overall} = sum(helpful) $-$ sum(counterproductive),
+  the full six-dimension measure.
+\end{itemize}
+
+The three counterproductive dimensions line up with the point-level fallacy
+categories in Section~\ref{sec:pointlevel}: overgeneralization maps to
+fallacies, irrelevant rebuttal maps to evasion, and personal attack / straw man
+map to hostility. So the fine-grained tile feedback and the round-level rubric
+are measuring the same behaviors at two grain sizes.
+
+\subsection{On gold-standard annotations}
+
+We do not have expert-scored gameplays from a previous pilot, and the judge is
+currently zero-shot. So the plan is to build the annotations, not assume them.
+After the 5-person pilot I will have Steve (and ideally a second coder so we get
+inter-rater reliability) score roughly 20--30 rounds on this same six-dimension
+1--5 rubric. Those expert scores get used two ways: as few-shot examples in the
+judge prompt, and to compute agreement between the LLM and the human coders
+(Krippendorff's alpha), benchmarked against how well the two humans agree with
+each other. If a dimension has weak agreement, I revise its anchors before I
+trust the confirmatory tests. This happens on pilot data, before the full run.
+
+\section{The LLM prompts (live)}
+
+These are the exact prompts in the running study.
+
+\subsection{Round scoring / judge prompt}
+
+\begin{Verbatim}[fontsize=\small]
+You are scoring how well a participant argued in one round of a debate
+game, on six behaviors. Score each on a 1-5 scale (1 = not at all
+present, 5 = strongly present).
+
+HELPFUL behaviors (constructive argumentation):
+1. reasoning_quality — claims are specific and backed by a reason,
+   example, or mechanism; conclusions follow from premises.
+2. engagement — directly takes on the opponent's strongest points and
+   represents their view fairly, rather than talking past them.
+3. constructive_stance — critiques the idea not the person; acknowledges
+   any valid points; curious and open.
+
+COUNTERPRODUCTIVE behaviors (higher = more of the bad behavior):
+4. fallacies — overgeneralizing, false cause, or exaggeration; sweeping
+   unsupported claims.
+5. evasion — ignoring the opponent's points, changing the subject, or
+   whataboutism.
+6. hostility — personal attacks, straw-manning, or dismissing the other
+   side's view.
+{examples}
+Topic: {topic}
+The participant's arguments this round:
+{arguments}
+
+Respond with ONLY a JSON object with all six keys plus feedback.
+\end{Verbatim}
+
+The \texttt{\{examples\}} slot is where the expert-coded few-shot examples get
+inserted once we have them. Empty means zero-shot, which is the current default.
+
+\subsection{Coach (ask-the-coach) prompt}
+
+\begin{Verbatim}[fontsize=\small]
+You are a supportive debate coach. The participant just argued a round.
+Their arguments:
+{arguments}
+
+They ask: {question}
+
+Answer in 2-3 sentences: specific, encouraging, actionable.
+\end{Verbatim}
+
+\subsection{Co-player prompt (content step)}
+
+\begin{Verbatim}[fontsize=\small]
+You are writing a single debate argument tile.
+Topic: "{topic}"
+You argue {side_label} the topic.
+Responding to: "{target_text}"
+Argument angle: {angle}
+
+Rules:
+- ONE grammatically complete sentence. Period at the end.
+- Hard character limit; write a complete sentence that fits.
+- No question marks. No fallacies.
+- Argue in good faith: make the strongest FAIR point for your side.
+  No cheap shots, no straw-manning, no exaggeration — a reasonable
+  sparring partner, not a troll.
+- Sound like a thoughtful student, not a textbook.
+- Return your argument text only.
+\end{Verbatim}
+
+\section{Point-level coaching (per-tile fallacy feedback)}
+\label{sec:pointlevel}
+
+This is the coaching layer the AICoach condition uses inside a round. It looks at
+a single argument tile and decides whether to flag a reasoning problem and how to
+explain it in plain language. My priority here is precision over recall: missing
+a weak argument is better than repeatedly flagging fine ones, because false
+positives interrupt play and make people distrust the system.
+
+The first-wave categories I use, with the player-facing label in italics:
+\begin{itemize}
+  \item Lack of specificity (\textit{Needs more detail})
+  \item Overgeneralization (\textit{Too broad})
+  \item False causation (\textit{Causal leap})
+  \item Irrelevant rebuttal (\textit{Needs clearer connection})
+\end{itemize}
+
+Rarer categories (exaggeration, anecdotal evidence, appeal to authority, straw
+man, whataboutism) stay research-only for now because they are harder to detect
+reliably from a short tile and produce noisier classifications.
+
+The prompt separates the task into stages: evaluate the tile in context, decide
+whether a target issue is present, decide whether it is strong enough to show,
+and only then produce a short explanation and an optional rewrite. Rewrites have
+to preserve the participant's original stance; a rewrite that flips or softens
+the side undermines trust.
+
+\section{Analysis and preregistration plan}
+\label{sec:analysis}
+
+The confirmatory tests are frozen before the full run. The pilot (n=5) is for
+checking the pipeline and timing, not for inference.
+
+\paragraph{H1 (primary).} AICoach participants improve across rounds more than
+Control. Model: \texttt{composite \textasciitilde{} condition * round\_c +
+(1 | participant)}. The condition-by-round interaction is the test; positive
+supports H1. If the mixed model will not fit the pilot n, the fallback is a
+Welch t-test on each participant's round-1 to round-3 change (difference in
+differences).
+
+\paragraph{H2--H3 (secondary).} Same model on \texttt{analysis\_overall} (the
+full six-dim measure) and on the summed counterproductive score (does coaching
+reduce fallacies / evasion / hostility across rounds).
+
+\paragraph{H4 (exploratory).} Which individual dimensions move most. Descriptive,
+not corrected for multiple comparisons.
+
+\paragraph{Rubric validation.} The LLM-vs-human agreement described in
+Section~\ref{sec:rubric}, run on pilot data before the full study.
+
+\paragraph{Exclusions (prespecified).} Did not finish all three rounds; failed an
+effort check (empty or single-character arguments for a whole round); duplicate
+Prolific ID; a scored round that fell back to canned text because the coach or
+opponent errored.
+
+The analysis runs from \texttt{analysis/e18\_analysis.ipynb} on the study's data
+export.
+
+\section{Open decisions I still want to settle}
+\label{sec:open}
+
+\begin{enumerate}
+  \item The exact minimum turns per round and how strictly to require a direct
+  reply to the co-player (Section~\ref{sec:length}).
+  \item Final anchors for each of the six dimensions, especially constructive
+  stance, which I think can hit a ceiling if it only rewards not being rude.
+  \item Who codes the validation sample (Steve alone, or Steve plus a second
+  coder for inter-rater reliability).
+  \item Model choice for the judge. The eval-framework paper used Gemini 2.5 Pro
+  and Claude 3.7 Sonnet; we are on Claude Sonnet 4.5.
+\end{enumerate}
+
+\end{document}
