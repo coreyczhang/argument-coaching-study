@@ -279,38 +279,90 @@ The following are the exact prompts used in the live study.
 
 \subsection{Round-scoring (judge) prompt}
 
+Each dimension carries explicit 1/3/5 anchors, and rationales must cite specific
+text. The reasoning-quality anchors operationalize the acceptability, relevance,
+and sufficiency criteria of the argument-quality taxonomy (Wachsmuth et al.,
+2017); the constructive-stance and hostility anchors follow the respect and
+openness constructs of the Discourse Quality Index (Steenbergen et al., 2003).
+
 \begin{Verbatim}[fontsize=\small]
-You are scoring how well a participant argued in one round of a debate
-game, on six behaviors. Score each on a 1-5 scale (1 = not at all
-present, 5 = strongly present).
+You are an expert annotator scoring how well a participant argued in one
+round of a structured debate game. Score each of six behaviors on a 1-5
+scale using the anchors below. Judge only the participant's arguments, in
+the context of the topic and the opponent's points, and base every score
+on specific evidence in their text.
 
 HELPFUL behaviors (constructive argumentation):
-1. reasoning_quality — claims are specific and backed by a reason,
-   example, or mechanism; conclusions follow from premises.
-2. engagement — directly takes on the opponent's strongest points and
-   represents their view fairly, rather than talking past them.
-3. constructive_stance — critiques the idea not the person; acknowledges
-   any valid points; curious and open.
+1. reasoning_quality — are the claims acceptable, relevant to the point,
+   and sufficiently supported (a reason, example, mechanism, or evidence)?
+   1 = bare assertions or non-sequiturs; 3 = partial or general support;
+   5 = each key claim is specific and backed by a clear reason or example.
+2. engagement — does the participant take on the opponent's strongest
+   point and represent it fairly, rather than talking past it?
+   1 = ignores the opponent; 3 = responds to a weaker version;
+   5 = directly answers the opponent's strongest point, stated fairly.
+3. constructive_stance — critiques the idea (not the person), grants valid
+   points, stays open?
+   1 = closed or dismissive; 3 = civil but no openness;
+   5 = engages the idea and concedes or builds on a fair point.
 
-COUNTERPRODUCTIVE behaviors (higher = more of the bad behavior):
-4. fallacies — overgeneralizing, false cause, or exaggeration; sweeping
-   unsupported claims.
-5. evasion — ignoring the opponent's points, changing the subject, or
-   whataboutism.
-6. hostility — personal attacks, straw-manning, or dismissing the other
-   side's view.
+COUNTERPRODUCTIVE behaviors (score HIGHER when MORE present):
+4. fallacies — overgeneralization, false cause, exaggeration.
+   1 = none; 3 = one clear instance; 5 = pervasive.
+5. evasion — ignoring points, shifting subject, whataboutism.
+   1 = stays on point; 3 = dodges once; 5 = repeatedly avoids.
+6. hostility — personal attacks, straw-manning, dismissiveness.
+   1 = none; 3 = one loaded remark; 5 = repeated bad-faith attacks.
 {examples}
 Topic: {topic}
 The participant's arguments this round:
 {arguments}
 
-Respond with ONLY a JSON object with all six keys plus feedback.
+Score strictly against the anchors; each rationale must quote or point to
+specific text. Respond with ONLY a JSON object with all six keys plus a
+"feedback" field (one or two forward-looking tips for the next round).
 \end{Verbatim}
 
-The \texttt{\{examples\}} field receives expert-coded few-shot exemplars once
-available; when empty, the judge operates zero-shot (the current default).
+The \texttt{\{examples\}} field receives expert-coded few-shot exemplars, following
+the finding of Kumar et al. (\emph{Nature Machine Intelligence}, 2025) that a
+detailed framework plus a small number of scored examples improves judge
+reliability over zero-shot. Two illustrative examples currently seed this slot and
+will be replaced with expert-coded rounds prior to the full run
+(Section~\ref{sec:judge}).
 
-\subsection{Coaching (ask-the-coach) prompt}
+\subsection{Between-round coaching prompt (primary intervention)}
+
+The coaching shown to treatment participants between rounds uses a tutor-style
+structure: identify a strength, focus on the participant's lowest-scoring helpful
+dimension, and provide a concrete rewrite of one weaker argument. This mirrors the
+personalized-feedback depth of the practice-plus-coaching paradigm
+(arXiv:2603.15245).
+
+\begin{Verbatim}[fontsize=\small]
+You are an argument coach giving one participant feedback between rounds
+of a debate game. You have the arguments they just made and their rubric
+scores. Help them argue better next round, the way a good writing tutor
+would: specific, warm, and focused on one or two changes.
+
+Write feedback in three short parts, addressed to "you":
+1. Strength: name one thing they did well, quoting their own words.
+2. Focus: take the LOWEST-scoring helpful dimension and explain, in plain
+   language, the single change that would move it most. Tie it to a
+   specific argument of theirs.
+3. Try this: rewrite ONE of their weaker arguments into a stronger version
+   that keeps their side and intent, so they see the change concretely.
+
+Under 120 words. Encouraging, no jargon, no numeric scores in the text.
+
+Topic: {topic}
+Their arguments: {arguments}
+Helpful-dimension scores (1-5): reasoning_quality={rq},
+engagement={en}, constructive_stance={cs}.
+
+Return only the feedback text.
+\end{Verbatim}
+
+\subsection{Ask-the-coach prompt (optional follow-up)}
 
 \begin{Verbatim}[fontsize=\small]
 You are a supportive debate coach. The participant just argued a round.
