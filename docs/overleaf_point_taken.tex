@@ -20,49 +20,33 @@
 
 \begin{abstract}
 \noindent
-We describe the design and preregistered analysis plan for a between-subjects
-experiment testing whether a between-round, large language model (LLM) coaching
-intervention improves the quality of participants' argumentation over repeated
-practice. The study adapts the practice-plus-coaching paradigm of Kumar et al.
-(arXiv:2603.15245) from empathic communication to disagreement and argument.
-Participants complete three rounds of a structured argument game against a live,
-good-faith LLM co-player; those in the treatment condition additionally receive
-personalized coaching between rounds. Argument quality is scored on a six-dimension
-rubric by an LLM judge, following the evaluation framework of Kumar et al.
-(\emph{Nature Machine Intelligence}, 2025). This document specifies the design,
-the measures, the exact model prompts, and the confirmatory analyses; it is
-frozen prior to the full data collection.
+This study tests whether giving people short AI-generated coaching tips between
+rounds of a debate game helps them make better arguments over time. Participants
+play three rounds against a fair AI opponent, and we compare how much their
+argument quality improves across rounds when they get coaching versus when they
+don't. The design builds on Kumar et al. (arXiv:2603.15245), who showed that
+practicing with an AI partner and getting feedback improves empathic
+communication; we ask the same kind of question for argument instead of empathy.
+Each round is scored on six dimensions by an AI judge, following the evaluation
+approach of Kumar et al. (\emph{Nature Machine Intelligence}, 2025). This document
+lays out the design, the measures, the prompts, and the analyses, and is frozen
+before the full data collection.
 \end{abstract}
 
 \section{Introduction}
 
-Point Taken is a structured discussion game in which participants construct,
-place, and revise arguments in a reflective format rather than in the free-form
-manner of ordinary online debate. The present study examines whether AI-delivered
-coaching can improve the quality of a participant's argumentation across repeated
-practice, without disrupting gameplay.
-
-The design adapts an established practice-plus-coaching paradigm. Kumar et al.
-(arXiv:2603.15245) show that practicing with an LLM partner and receiving
-personalized feedback improves human empathic communication. We ask the analogous
-question for disagreement: does between-round coaching improve how well people
-argue? We hypothesize that participants who receive coaching will show larger
-gains in argument quality across rounds than participants who practice without
-coaching.
-
-The document is organized as follows. Sections~\ref{sec:design}--\ref{sec:measures}
-specify the design, procedure, and measures. Section~\ref{sec:judge} describes the
-LLM-as-judge scoring and its validation. Section~\ref{sec:analysis} states the
-preregistered analyses. Section~\ref{sec:results} is a placeholder for the pilot
-results. The exact model prompts are reproduced verbatim in
-Appendix~\ref{sec:prompts}, and the point-level coaching layer is documented in
-Appendix~\ref{sec:pointlevel}.
+Point Taken is a debate game where people build, place, and revise arguments in a
+more structured way than a normal online comment thread. This study looks at
+whether AI coaching can help people argue better over repeated practice without
+getting in the way of the game. The next section (Section~\ref{sec:whynow}) lays
+out why this is worth doing now; Sections~\ref{sec:design}--\ref{sec:measures} cover
+the design, procedure, and measures; Section~\ref{sec:judge} covers the scoring and
+how I check it; and Section~\ref{sec:analysis} is the analysis plan. The full
+prompts are in Appendix~\ref{sec:prompts}.
 
 \section{Why this study, and why now}
 \label{sec:whynow}
 
-% Corey's own words (assembled from his reasoning). Read and adjust so every line
-% is one you can defend out loud.
 AI is being used more and more in how people argue and reason online, and learning
 how to interact with it well is becoming important. Part of why online arguing
 goes wrong is that people cannot read body language or tone, so they misread each
@@ -85,18 +69,26 @@ participants are randomly assigned (50/50) on first entry:
   coaching interface.
 \end{itemize}
 
-A between-subjects design is used to prevent contamination of the control
-condition by the coaching intervention. In each round, a participant argues
-against a live LLM co-player rather than another participant; this permits
-asynchronous, single-participant data collection on Prolific without real-time
-matching. Each round presents one topic, with topic order randomized per
-participant so that topic is not confounded with round.
+Everything else --- the topics, the AI opponent, the three rounds, and the
+scoring --- is identical across the two groups. The only difference is whether the
+between-round coaching message appears. In each round a participant argues against
+the AI opponent rather than another person, which lets us run one participant at a
+time online without having to match people in real time. Each round uses one
+topic, and the topic order is randomized per participant so that topic is not tied
+to round.
 
-The co-player is instructed to argue in good faith (a reasonable interlocutor
-rather than an adversarial one). This choice isolates the construct of interest,
-namely how well a participant argues against a fair partner; an adversarial
-partner would instead index a participant's resistance to bad-faith tactics, a
-distinct construct outside the scope of this study.
+Each person stays in one group the whole time so the coaching can't leak into the
+no-coach comparison. If someone got coached in one round, that would likely change
+how they argue afterward even without coaching, which would contaminate what "no
+coaching" looks like. Keeping people in one group keeps the control condition
+clean.
+
+The AI opponent argues in good faith rather than being a jerk, because what we are
+measuring is how well someone can build an argument, not how well they handle a
+bad-faith opponent. If the opponent used cheap shots or straw-manned them, a
+participant's response would partly reflect resilience to bad tactics rather than
+argument-construction skill --- a different question than the one this study is
+asking.
 
 \begin{figure}[h]
 \centering
@@ -113,26 +105,20 @@ the composite score across rounds, compared between conditions.}
 \section{Procedure: rounds and interaction requirements}
 \label{sec:procedure}
 
-Each round must contain sufficient interaction to (i) yield a scorable sample of
-the participant's argumentation and (ii) provide the coach with material to
-respond to, while remaining short enough to sustain participant engagement on
-Prolific. Accordingly, a round is defined in terms of exchanges rather than
-isolated contributions: a participant must contribute at least three argument
-turns per round, at least one of which must directly respond to the co-player
-rather than introduce an unrelated point. This requirement ensures mutual
-engagement and renders the \emph{engagement} dimension measurable. Across three
-rounds this yields approximately nine to twelve participant messages, or roughly
-15--20 minutes of task time. The exact minimum thresholds are noted as an open
-parameter in Section~\ref{sec:open}.
+The game is three rounds, one topic per round (topic order randomized), and takes
+roughly 15--20 minutes total. To finish a round, a participant has to make at
+least three argument turns, and at least one of those turns has to directly
+respond to something the opponent said rather than just introduce an unrelated
+point. That reply requirement is what makes the \emph{engagement} dimension
+measurable, since it forces the two sides to actually interact. The exact minimum
+thresholds are noted as an open parameter in Section~\ref{sec:open}.
 
 \section{Measures}
 \label{sec:measures}
 
-Each round is scored by an LLM judge on \textbf{six dimensions}, each on a
-five-point scale ($1 =$ not at all present, $5 =$ strongly present). Following the
-preregistered structure of Kumar et al. (arXiv:2603.15245), the dimensions divide
-into three prescriptive (helpful) and three proscriptive (counterproductive)
-behaviors:
+Each round is scored by an AI judge on \textbf{six dimensions}, each rated 1--5.
+Following the structure of Kumar et al. (arXiv:2603.15245), the six split into
+three "helpful" behaviors and three "counterproductive" ones:
 
 \begin{itemize}[nosep]
   \item \textbf{Helpful (shown to treatment participants):} reasoning quality,
@@ -150,14 +136,14 @@ The \texttt{composite} is the primary dependent measure; \texttt{analysis\_overa
 is the full six-dimension score, mirroring the prescriptive-minus-proscriptive
 composite of the source paradigm.
 
-Only the three helpful dimensions are displayed to treatment participants. This
-is a deliberate design decision: displaying all six risks inducing participants to
-optimize a single aggregate score, whereas the objective of the intervention is to
-shift argumentation strategy. The three counterproductive dimensions correspond to
-the point-level fallacy categories in Appendix~\ref{sec:pointlevel}
-(overgeneralization to fallacies, irrelevant rebuttal to evasion, personal attack
-and straw man to hostility), so that the fine-grained tile feedback and the
-round-level rubric assess the same behaviors at two levels of granularity.
+Only the three helpful dimensions are shown back to participants in the treatment
+group. The counterproductive ones are kept behind the scenes for analysis, so
+people aren't just optimizing a single number. The three counterproductive
+dimensions also line up with the point-level fallacy categories in
+Appendix~\ref{sec:pointlevel} (overgeneralization maps to fallacies, irrelevant
+rebuttal to evasion, and personal attack or straw man to hostility), so the
+per-argument feedback and the round-level score are tracking the same behaviors at
+two levels of detail.
 
 Participants additionally complete a baseline survey (topic stances and four
 self-reported disagreement-style items) and an exit survey.
@@ -165,8 +151,6 @@ self-reported disagreement-style items) and an exit survey.
 \subsection{Why these six dimensions}
 \label{sec:whydims}
 
-% Corey's own words (assembled from his reasoning), with the supporting citations.
-% Read and adjust so every line is one you can defend out loud.
 The six dimensions split into three that help an argument and three that hurt it.
 On the helpful side: \emph{reasoning quality}, because good reasoning uses logic
 and evidence while weak reasoning is just opinion --- this is the acceptability and
@@ -188,23 +172,18 @@ avoid, mirroring the prescriptive/proscriptive split of the paradigm we replicat
 \section{LLM-as-judge and validation}
 \label{sec:judge}
 
-Round scoring is performed by a single LLM call per round
-(\texttt{claude-sonnet-4-5}); the scoring prompt is reproduced in
-Appendix~\ref{sec:prompts}. Because the primary outcome depends on this judge, we
-validate it rather than assume its reliability, following the evaluation framework
-of Kumar et al. (\emph{Nature Machine Intelligence}, 2025).
+Each round is scored by one call to the AI judge (\texttt{claude-sonnet-4-5}); the
+scoring prompt is in Appendix~\ref{sec:prompts}. Since the main result depends on
+this judge, I check that it scores well rather than assuming it does, following the
+evaluation approach of Kumar et al. (\emph{Nature Machine Intelligence}, 2025).
 
-The judge is currently zero-shot. Expert annotations do not yet exist for this
-task; we will therefore construct them. Following the pilot, an expert coder
-(and, where feasible, a second coder to establish inter-rater reliability) will
-score a random subsample of approximately 20--30 rounds on the same
-six-dimension, five-point rubric. These expert scores serve two purposes: as
-few-shot exemplars in the judge prompt, and as a reference against which to
-compute agreement between the LLM and human coders (Krippendorff's $\alpha$),
-benchmarked against human--human agreement on the overlapping subset. Dimensions
-exhibiting weak agreement will have their anchors revised before the confirmatory
-analyses are conducted. This validation is performed on pilot data, prior to the
-full run.
+To do that, a human expert (and ideally a second coder, to check they agree with
+each other) will hand-score a sample of about 20--30 rounds on the same rubric. I
+then compare the AI's scores to the human scores using Krippendorff's $\alpha$, and
+check that against how well the two humans agreed with each other. Any dimension
+where the AI doesn't match well gets its scoring instructions revised before the
+real study runs. The same expert-scored rounds also seed the few-shot examples in
+the judge prompt. This happens on the pilot data, before the full run.
 
 \section{Preregistered analysis plan}
 \label{sec:analysis}
@@ -213,18 +192,16 @@ The confirmatory analyses below are frozen prior to the full data collection. Th
 pilot ($n = 5$) serves only to validate the data pipeline and estimate task
 duration, and is not used for inference.
 
-\paragraph{Primary hypothesis (H1).} Treatment participants improve in argument
-quality across rounds to a greater extent than control participants. This is
-tested with a linear mixed-effects model,
+\paragraph{Primary hypothesis (H1).} The coached group's argument-quality score
+climbs more across the three rounds than the control group's does. Statistically
+this is the condition-by-round interaction in a mixed-effects model,
 \[
   \texttt{composite} \sim \text{condition} \times \text{round}_c + (1 \mid \text{participant}),
 \]
-where $\text{round}_c$ is round centered ($0,1,2$). The condition-by-round
-interaction is the confirmatory test; a positive coefficient supports H1, and is
-reported with its 95\% confidence interval. Should the mixed model fail to
-converge at the available sample size, the preregistered fallback is a Welch
-two-sample $t$-test on each participant's round-1-to-round-3 change score
-(a difference-in-differences contrast).
+with $\text{round}_c$ the round centered ($0,1,2$). A positive interaction supports
+H1 and is reported with its 95\% confidence interval. If the main model doesn't run
+cleanly at the available sample size, the backup is a simpler round-1-vs-round-3
+change-score comparison (a Welch two-sample $t$-test, i.e. difference-in-differences).
 
 \paragraph{Secondary hypotheses (H2--H3).} The same model is applied to
 \texttt{analysis\_overall} (the full six-dimension measure) and to the summed
@@ -235,18 +212,18 @@ behaviors across rounds relative to control.
 descriptively to identify which dimensions are most affected; these are not
 corrected for multiple comparisons and are labeled exploratory.
 
-\paragraph{Prespecified exclusions.} Participants are excluded if they do not
-complete all three rounds; fail an effort check (e.g., empty or single-character
-arguments across an entire round); submit a duplicate Prolific identifier; or have
-any scored round that reverted to fallback text owing to a coach or opponent error
-(flagged via the exported \texttt{model\_name} field). The number of exclusions and
-reasons are reported.
+\paragraph{Prespecified exclusions.} A participant is dropped if they don't finish
+all three rounds; if they fail an effort check (for example, a whole round of empty
+or one-character non-answers); if they show up as a duplicate Prolific ID; or if a
+round's score had to fall back to error text because the coach or opponent AI
+failed (flagged via the exported \texttt{model\_name} field). The number of
+exclusions and the reasons are reported.
 
-\paragraph{Sample and inference.} The pilot ($n = 5$) is for pipeline validation
-only. The full run targets approximately 30 participants per condition; at this
-scale the study is treated as an estimate of the effect size and its confidence
-interval rather than a fully powered confirmatory test, with a formal power
-analysis for any subsequent confirmatory study based on the effect observed here.
+\paragraph{Sample and inference.} The pilot ($n = 5$) only tested that the game and
+scoring pipeline work and is not used as data. The full run targets about 30
+participants per group (roughly 60 total). That number isn't from a formal power
+calculation; at this scale the study is a first estimate of the effect size and its
+confidence interval, which would then inform a properly powered follow-up.
 
 All analyses are executed from \texttt{analysis/e18\_analysis.ipynb} on the
 study's data export. The repository is organized to match the replication
