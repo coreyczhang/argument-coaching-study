@@ -53,7 +53,11 @@ prompts are in Appendix~\ref{sec:prompts}.
 AI is being used more and more in how people argue and reason online, and learning
 how to interact with it well is becoming important. Part of why online arguing
 goes wrong is that people cannot read body language or tone, so they misread each
-other. Prior work has shown that practicing with an AI partner and getting
+other. There is evidence for this: when people hear an opinion they disagree with
+instead of reading it, they judge the other person as more thoughtful and are less
+likely to dehumanize them (Schroeder, Kardas, \& Epley, 2017), which suggests text
+strips out the cues that keep disagreement constructive. Prior work has shown that
+practicing with an AI partner and getting
 feedback can improve empathic communication, but whether an AI coach can help
 people construct better arguments has not been tested. Arguing well is a different
 skill: it is about building points from logic and evidence rather than emotion.
@@ -155,22 +159,55 @@ self-reported disagreement-style items) and an exit survey.
 \label{sec:whydims}
 
 The six dimensions split into three that help an argument and three that hurt it.
-On the helpful side: \emph{reasoning quality}, because good reasoning uses logic
-and evidence while weak reasoning is just opinion --- this is the acceptability and
-sufficiency of a claim in Wachsmuth et al.'s (2017) argument-quality taxonomy;
-\emph{engagement}, meaning you respond to the other side's strongest point rather
-than a weaker version (dialectical relevance, and the opposite of straw-manning);
-and \emph{constructive stance}, where you build on and acknowledge their point
-instead of ignoring its premise, which matches the respect and openness codes of
-the Discourse Quality Index (Steenbergen et al., 2003). On the counterproductive
-side: \emph{fallacies} --- I focus on the four most common and highest-impact ones
-I saw in the earlier game data (vague claims, over-broad claims, causal leaps, and
-irrelevant responses) rather than rarer textbook fallacies; \emph{evasion}, when
-the other point is not acknowledged and no counterargument is even attempted; and
-\emph{hostility}, attacking the person emotionally instead of the argument (an
-ad hominem, again a failure of DQI respect). The three helpful dimensions capture
-what good arguing adds; the three counterproductive ones capture what it should
-avoid, mirroring the prescriptive/proscriptive split of the paradigm we replicate.
+I chose them to cover both what good arguing adds and what it should avoid, and
+each one maps onto established work rather than being something I invented.
+
+Helpful (shown to treatment participants):
+\begin{itemize}[nosep]
+  \item \emph{Reasoning quality} --- whether claims are backed by a reason,
+  example, or evidence, and whether the conclusion actually follows. Good
+  reasoning uses logic and evidence; weak reasoning is just opinion. This is what
+  Wachsmuth et al. (2017) call \emph{cogency}: a claim should be acceptable (worth
+  believing), relevant (it supports the point), and sufficient (there is enough
+  behind it). The Discourse Quality Index (Steenbergen et al., 2003) captures the
+  same idea as \emph{justification}.
+  \item \emph{Engagement} --- whether you take on the other side's strongest point
+  and represent it fairly, instead of talking past them or knocking down a weaker
+  version. This is the dialectical side of Wachsmuth's taxonomy (whether an
+  argument holds up against the real counterarguments), and it lines up with the
+  rules of critical discussion in pragma-dialectics (van Eemeren \& Grootendorst),
+  which say you have to address the actual standpoint. Not doing this is
+  straw-manning.
+  \item \emph{Constructive stance} --- whether you critique the idea rather than
+  the person, grant fair points, and stay open to changing your mind. This maps
+  onto two Discourse Quality Index codes: \emph{respect} (toward the other person
+  and their argument) and \emph{constructive politics} (openness to build on or
+  revise a position).
+\end{itemize}
+
+Counterproductive (scored for analysis, not shown; a higher score means more of
+the bad behavior):
+\begin{itemize}[nosep]
+  \item \emph{Fallacies} --- overgeneralizing, false cause, and exaggeration.
+  These are failures of the same cogency criteria above, and they are classic
+  informal fallacies (Walton, 1995). I focus on the four most common and
+  highest-impact ones I saw in the earlier game data (vague claims, over-broad
+  claims, causal leaps, and irrelevant responses) rather than rarer textbook
+  fallacies.
+  \item \emph{Evasion} --- not acknowledging the other point and not even
+  attempting a counterargument. This is a relevance failure and the flip side of
+  engagement: you are supposed to defend the actual disagreement, not change the
+  subject.
+  \item \emph{Hostility} --- attacking the person emotionally instead of the
+  argument, i.e.\ an ad hominem. This is the opposite of the Discourse Quality
+  Index's \emph{respect}, and it is a classic fallacy in its own right.
+\end{itemize}
+
+The three helpful dimensions capture what good arguing adds; the three
+counterproductive ones capture what it should avoid. Splitting it this way (three
+prescriptive, three proscriptive, with overall $=$ helpful $-$ counterproductive)
+mirrors the paradigm we are replicating, and it lets the coaching push people
+toward the good moves and away from the bad ones rather than toward a single number.
 
 \section{LLM-as-judge and validation}
 \label{sec:judge}
@@ -291,6 +328,23 @@ structured to match their public replication materials.
   openness and lower political animosity} (IPR Working Paper WP-25-27).
   Northwestern University Institute for Policy Research. The earlier $N = 38$
   pilot of the base game that motivates this study.
+\end{itemize}
+
+\subsection*{Supporting references (verify exact details before formatting)}
+\begin{itemize}[nosep]
+  \item Wachsmuth, H., et al. (2017). Computational Argumentation Quality
+  Assessment in Natural Language. \emph{Proceedings of EACL}. (See also
+  ``Argumentation Quality Assessment: Theory vs.\ Practice,'' \emph{ACL} 2017.)
+  \item Steenbergen, M. R., B\"achtiger, A., Sp\"orndli, M., \& Steiner, J. (2003).
+  Measuring Political Deliberation: A Discourse Quality Index. \emph{Comparative
+  European Politics}, 1(1), 21--48.
+  \item Schroeder, J., Kardas, M., \& Epley, N. (2017). The Humanizing Voice:
+  Speech Reveals, and Text Conceals, a More Thoughtful Mind in the Midst of
+  Disagreement. \emph{Psychological Science}, 28(12), 1745--1762.
+  \item Walton, D. (1995). \emph{A Pragmatic Theory of Fallacy}. University of
+  Alabama Press.
+  \item van Eemeren, F. H., \& Grootendorst, R. (2004). \emph{A Systematic Theory
+  of Argumentation: The Pragma-Dialectical Approach}. Cambridge University Press.
 \end{itemize}
 
 \appendix
