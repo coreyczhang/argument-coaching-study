@@ -29,6 +29,17 @@ stance), each rated 1–5 by an AI judge. A secondary measure is the full six-
 dimension score (the three helpful dimensions minus three counterproductive ones:
 fallacies, evasion, hostility).
 
+The dimensions are not ad hoc. Reasoning quality follows the "cogency" criteria
+(acceptability, relevance, sufficiency of claims) in Wachsmuth et al.'s (2017)
+argument-quality taxonomy; engagement follows its dialectical criterion (addressing
+the real counterargument) and the pragma-dialectical rule of addressing the actual
+standpoint (van Eemeren & Grootendorst); constructive stance follows the respect
+and constructive-politics codes of the Discourse Quality Index (Steenbergen et al.,
+2003). The counterproductive dimensions are the inverses: fallacies (Walton, 1995),
+evasion (a relevance failure), and hostility (ad hominem / DQI disrespect). The
+three-helpful/three-counterproductive split mirrors the preregistered structure of
+the paradigm being replicated (Kumar et al., arXiv:2603.15245).
+
 **4) How many and which conditions will participants be assigned to?**
 
 Two, assigned between subjects and randomized 50/50: Control (the game with no

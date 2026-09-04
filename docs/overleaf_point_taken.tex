@@ -35,34 +35,48 @@ before the full data collection.
 
 \section{Introduction}
 
-Point Taken is a debate game where people build, place, and revise arguments in a
-more structured way than a normal online comment thread. An earlier pilot of the
-game ($N = 38$) found that, compared to unstructured discussion, it increased
-understanding of opposing positions, intellectual humility, and openness to
-learning (Elnakouri et al., 2025). This study builds on that by asking whether AI
-coaching can further improve how well people argue over repeated practice, without
-getting in the way of the game. The next section (Section~\ref{sec:whynow}) lays
-out why this is worth doing now; Sections~\ref{sec:design}--\ref{sec:measures} cover
-the design, procedure, and measures; Section~\ref{sec:judge} covers the scoring and
-how I check it; and Section~\ref{sec:analysis} is the analysis plan. The full
-prompts are in Appendix~\ref{sec:prompts}.
+Online, disagreement breaks down fast. Part of the reason is the medium itself:
+when people cannot hear tone or see body language, they misread each other. There
+is evidence for this --- when people hear an opinion they disagree with instead of
+reading it, they judge the other person as more thoughtful and are less likely to
+dehumanize them (Schroeder, Kardas, \& Epley, 2017) --- so text strips out the cues
+that keep disagreement constructive.
 
-\section{Why this study, and why now}
+Structured argument games are one way to push back on this. Point Taken has people
+build, place, and revise arguments in a more deliberate way than a normal comment
+thread, and an earlier pilot ($N = 38$) found that, compared to unstructured
+discussion, it increased understanding of opposing positions, intellectual
+humility, and openness to learning (Elnakouri et al., 2025).
+
+A separate line of work shows that practicing with an AI partner and getting
+personalized feedback can improve how people communicate: Kumar et al.
+(arXiv:2603.15245) demonstrated this for empathic communication. What has not been
+tested is whether the same practice-plus-coaching approach helps people build
+better \emph{arguments} --- a different skill, more about logic and evidence than
+emotion. That is the gap this study addresses.
+
+\paragraph{Research question.} Does short, AI-generated coaching between rounds of
+an argument game improve the quality of people's arguments over repeated practice,
+more than practice alone? I expect it will --- specifically, that the coaching will
+make fallacies visible and help people structure their arguments more clearly.
+
+The rest of this document covers why it is worth doing now
+(Section~\ref{sec:whynow}), the design, procedure, and measures
+(Sections~\ref{sec:design}--\ref{sec:measures}), how the scoring works and how I
+validate it (Section~\ref{sec:judge}), and the preregistered analysis
+(Section~\ref{sec:analysis}). The full prompts are in Appendix~\ref{sec:prompts}.
+
+\section{Why now}
 \label{sec:whynow}
 
-AI is being used more and more in how people argue and reason online, and learning
-how to interact with it well is becoming important. Part of why online arguing
-goes wrong is that people cannot read body language or tone, so they misread each
-other. There is evidence for this: when people hear an opinion they disagree with
-instead of reading it, they judge the other person as more thoughtful and are less
-likely to dehumanize them (Schroeder, Kardas, \& Epley, 2017), which suggests text
-strips out the cues that keep disagreement constructive. Prior work has shown that
-practicing with an AI partner and getting
-feedback can improve empathic communication, but whether an AI coach can help
-people construct better arguments has not been tested. Arguing well is a different
-skill: it is about building points from logic and evidence rather than emotion.
-This study tests that directly. My expectation is that the coach will make
-fallacies visible to people and help them structure their arguments better.
+Two things make this the right time to study it. First, AI is increasingly part of
+how people argue and reason online, so learning to argue well with and around it is
+becoming its own skill worth supporting. Second, the study only became runnable
+recently: it needs an AI that can argue back in good faith and adapt to a person in
+real time, and an AI that can score argument quality reliably enough to serve as an
+outcome measure. That second piece was only recently established (Kumar et al.,
+\emph{Nature Machine Intelligence}, 2025). A couple of years ago, neither piece
+worked well enough to run this experiment.
 
 \section{Study design}
 \label{sec:design}
