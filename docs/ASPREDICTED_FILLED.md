@@ -51,17 +51,22 @@ round coaching message appears.
 **5) Specify exactly which analyses you will conduct.**
 
 Whether the coached group's score climbs more across the three rounds than the
-control group's does — the condition-by-round interaction in a mixed-effects model
-(composite ~ condition * round + (1 | participant)). If that model does not run
-cleanly at the available sample size, the backup is a simpler round-1-vs-round-3
-change-score comparison (a Welch two-sample t-test).
+control group's does — the condition-by-round interaction. This follows the primary
+analysis in the paper we replicate (Kumar et al., arXiv:2603.15245), which used a
+condition-by-round interaction with standard errors clustered at the participant
+level. I fit this as a mixed-effects model, composite ~ condition * round +
+(1 | participant); a linear regression with participant-clustered standard errors
+is the equivalent. If that model does not fit cleanly at this sample size, the
+backup is a round-1-vs-round-3 change-score comparison (a Welch two-sample t-test).
 
 **6) Describe exactly how outliers/exclusions will be handled.**
 
 A participant is excluded if they: don't finish all three rounds; fail an effort
-check (for example, a whole round of empty or one-character non-answers); show up
-as a duplicate Prolific ID; or have a round whose score had to fall back to error
-text because the coach or opponent AI failed.
+check (for example, a whole round of empty or one-character non-answers);
+self-report having used AI assistance (e.g., ChatGPT) to write their arguments
+(the same exclusion used in Kumar et al., arXiv:2603.15245); show up as a duplicate
+Prolific ID; or have a round whose score had to fall back to error text because the
+coach or opponent AI failed.
 
 **7) How many observations will be collected / what determines sample size?**
 
