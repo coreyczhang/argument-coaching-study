@@ -242,9 +242,8 @@ the judge prompt. This happens on the pilot data, before the full run.
 \section{Preregistered analysis plan}
 \label{sec:analysis}
 
-The confirmatory analyses below are frozen prior to the full data collection. The
-pilot ($n = 5$) serves only to validate the data pipeline and estimate task
-duration, and is not used for inference.
+I am freezing these analyses before the full data collection. The pilot ($n = 5$)
+is only to check the pipeline and timing; I do not use it as data.
 
 \paragraph{Primary hypothesis (H1).} The coached group's argument-quality score
 climbs more across the three rounds than the control group's does. Statistically
@@ -252,37 +251,29 @@ this is the condition-by-round interaction in a mixed-effects model,
 \[
   \texttt{composite} \sim \text{condition} \times \text{round}_c + (1 \mid \text{participant}),
 \]
-with $\text{round}_c$ the round centered ($0,1,2$). A positive interaction supports
-H1 and is reported with its 95\% confidence interval. If the main model doesn't run
-cleanly at the available sample size, the backup is a simpler round-1-vs-round-3
-change-score comparison (a Welch two-sample $t$-test, i.e. difference-in-differences).
+with round centered ($0,1,2$). A positive interaction supports H1, and I report it
+with its 95\% CI. If that model doesn't fit cleanly at this sample size, I fall back
+to a round-1-vs-round-3 change-score comparison (a Welch $t$-test).
 
-\paragraph{Secondary hypotheses (H2--H3).} The same model is applied to
-\texttt{analysis\_overall} (the full six-dimension measure) and to the summed
-counterproductive score, testing whether coaching reduces counterproductive
-behaviors across rounds relative to control.
+\paragraph{Secondary (H2--H3).} I run the same model on the full six-dimension
+score (\texttt{analysis\_overall}) and on the summed counterproductive score, to
+see whether coaching also cuts down fallacies, evasion, and hostility across rounds.
 
-\paragraph{Exploratory analyses (H4).} Per-dimension trajectories are examined
-descriptively to identify which dimensions are most affected; these are not
-corrected for multiple comparisons and are labeled exploratory.
+\paragraph{Exploratory (H4).} I look at each dimension on its own to see which ones
+move most. This is descriptive and I don't correct for multiple comparisons.
 
 \paragraph{Prespecified exclusions.} A participant is dropped if they don't finish
 all three rounds; if they fail an effort check (for example, a whole round of empty
 or one-character non-answers); if they show up as a duplicate Prolific ID; or if a
 round's score had to fall back to error text because the coach or opponent AI
-failed (flagged via the exported \texttt{model\_name} field). The number of
-exclusions and the reasons are reported.
+failed (flagged via the exported \texttt{model\_name} field). I report how many I
+drop and why.
 
-\paragraph{Sample and inference.} The pilot ($n = 5$) only tested that the game and
-scoring pipeline work and is not used as data. The full run targets about 30
-participants per group (roughly 60 total). That number isn't from a formal power
-calculation; at this scale the study is a first estimate of the effect size and its
-confidence interval, which would then inform a properly powered follow-up.
+\paragraph{Sample.} About 30 per group (~60 total). That isn't from a power
+calculation; at this size I treat the study as a first estimate of the effect and
+its confidence interval, to set up a properly powered follow-up.
 
-All analyses are executed from \texttt{analysis/e18\_analysis.ipynb} on the
-study's data export. The repository is organized to match the replication
-repositories of the two source papers (a single analysis notebook together with a
-data export and a written, preregistered plan; see Section~\ref{sec:refs}).
+I run all of this from \texttt{analysis/e18\_analysis.ipynb} on the data export.
 
 \section{Results}
 \label{sec:results}
