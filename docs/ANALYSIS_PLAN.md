@@ -1,6 +1,6 @@
 # Preregistered Analysis Plan
 
-**Study:** Point Taken — Argument-Coaching Experiment
+**Study:** Point Taken, Argument-Coaching Experiment
 **Authors:** Corey Zhang, Aakriti Kumar, Steven Franconeri
 **Status:** Frozen prior to full data collection. The pilot (*n* = 5) is for
 pipeline validation and timing only and is not used for inference.

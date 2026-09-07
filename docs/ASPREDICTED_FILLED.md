@@ -1,4 +1,4 @@
-# AsPredicted Pre-Registration — Point Taken (Argument Coaching)
+# AsPredicted Pre-Registration: Point Taken (Argument Coaching)
 
 Paste into a Google Doc. Wording is drawn from your own answers; read it through
 and adjust anything before submitting so it's fully yours.
@@ -11,7 +11,7 @@ and adjust anything before submitting so it's fully yours.
 **1) Has data collection begun for this study?**
 
 No. Only a small pilot (n = 5) has run, and that was solely to test that the game
-and scoring pipeline work — it is not used as data in the actual analysis. Real
+and scoring pipeline work, and it is not used as data in the actual analysis. Real
 data collection has not started.
 
 **2) What's the main question being asked or hypothesis being tested?**
@@ -44,14 +44,14 @@ the paradigm being replicated (Kumar et al., arXiv:2603.15245).
 
 Two, assigned between subjects and randomized 50/50: Control (the game with no
 coaching) and Treatment / "AICoach" (the same game, with personalized coaching
-between each round). Everything else — the topics, the AI opponent, the three
-rounds, the scoring — is identical; the only difference is whether the between-
-round coaching message appears.
+between each round). Everything else is identical: the topics, the AI opponent, the
+three rounds, and the scoring. The only difference is whether the between-round
+coaching message appears.
 
 **5) Specify exactly which analyses you will conduct.**
 
 Whether the coached group's score climbs more across the three rounds than the
-control group's does — the condition-by-round interaction. This follows the primary
+control group's does. This is the condition-by-round interaction, which follows the primary
 analysis in the paper we replicate (Kumar et al., arXiv:2603.15245), which used a
 condition-by-round interaction with standard errors clustered at the participant
 level. I fit this as a mixed-effects model, composite ~ condition * round +
