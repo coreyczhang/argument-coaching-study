@@ -26,7 +26,7 @@ play three rounds against a fair AI opponent, and we compare how much their
 argument quality improves across rounds when they get coaching versus when they
 don't. The design builds on Kumar et al. (arXiv:2603.15245), who showed that
 practicing with an AI partner and getting feedback improves empathic
-communication; we ask the same kind of question for argument instead of empathy.
+communication; we ask the same kind of question about arguing.
 Each round is scored on six dimensions by an AI judge, following the evaluation
 approach of Kumar et al. (\emph{Nature Machine Intelligence}, 2025). This document
 lays out the design, the measures, the prompts, and the analyses, and is frozen
@@ -70,8 +70,8 @@ validate it (Section~\ref{sec:judge}), and the preregistered analysis
 \label{sec:whynow}
 
 Two things make this the right time to study it. First, AI is increasingly part of
-how people argue and reason online, so learning to argue well with and around it is
-becoming its own skill worth supporting. Second, the study only became runnable
+how people argue and reason online, and learning to argue well with and around it
+is becoming its own skill worth supporting. Second, the study only became runnable
 recently: it needs an AI that can argue back in good faith and adapt to a person in
 real time, and an AI that can score argument quality reliably enough to serve as an
 outcome measure. That second piece was only recently established (Kumar et al.,
@@ -92,9 +92,8 @@ participants are randomly assigned (50/50) on first entry:
 
 Everything else is identical across the two groups: the topics, the AI opponent,
 the three rounds, and the scoring. The only difference is whether the
-between-round coaching message appears. In each round a participant argues against
-the AI opponent rather than another person, which lets us run one participant at a
-time online without having to match people in real time. Each round uses one
+between-round coaching message appears. In each round a participant argues against the AI opponent, which lets us run one
+participant at a time online without having to match people in real time. Each round uses one
 topic, and the topic order is randomized per participant so that topic is not tied
 to round.
 
@@ -104,12 +103,10 @@ how they argue afterward even without coaching, which would contaminate what "no
 coaching" looks like. Keeping people in one group keeps the control condition
 clean.
 
-The AI opponent argues in good faith rather than being a jerk, because what we are
-measuring is how well someone can build an argument, not how well they handle a
-bad-faith opponent. If the opponent used cheap shots or straw-manned them, a
-participant's response would partly reflect resilience to bad tactics rather than
-argument-construction skill, which is a different question than the one this study
-is asking.
+The AI opponent argues in good faith. We want to measure how well someone builds
+an argument against a fair partner. If the opponent used cheap shots or
+straw-manned them, a participant's response would partly reflect how well they
+resist bad tactics, which is a different question.
 
 \begin{figure}[h]
 \centering
@@ -129,8 +126,7 @@ the composite score across rounds, compared between conditions.}
 The game is three rounds, one topic per round (topic order randomized), and takes
 roughly 15--20 minutes total. To finish a round, a participant has to make at
 least three argument turns, and at least one of those turns has to directly
-respond to something the opponent said rather than just introduce an unrelated
-point. That reply requirement is what makes the \emph{engagement} dimension
+answer something the opponent actually said. That reply requirement is what makes the \emph{engagement} dimension
 measurable, since it forces the two sides to actually interact. The exact minimum
 thresholds are noted as an open parameter in Section~\ref{sec:open}.
 
@@ -158,8 +154,8 @@ is the full six-dimension score, mirroring the prescriptive-minus-proscriptive
 composite of the source paradigm.
 
 Only the three helpful dimensions are shown back to participants in the treatment
-group. The counterproductive ones are kept behind the scenes for analysis, so
-people aren't just optimizing a single number. The three counterproductive
+group. The counterproductive ones are kept behind the scenes for analysis, which
+keeps people from optimizing a single number. The three counterproductive
 dimensions also line up with the point-level fallacy categories in
 Appendix~\ref{sec:pointlevel} (overgeneralization maps to fallacies, irrelevant
 rebuttal to evasion, and personal attack or straw man to hostility), so the
@@ -174,7 +170,7 @@ self-reported disagreement-style items) and an exit survey.
 
 The six dimensions split into three that help an argument and three that hurt it.
 I chose them to cover both what good arguing adds and what it should avoid, and
-each one maps onto established work rather than being something I invented.
+each one maps onto established work.
 
 Helpful (shown to treatment participants):
 \begin{itemize}[nosep]
@@ -186,14 +182,13 @@ Helpful (shown to treatment participants):
   behind it). The Discourse Quality Index (Steenbergen et al., 2003) captures the
   same idea as \emph{justification}.
   \item \emph{Engagement}: whether you take on the other side's strongest point
-  and represent it fairly, instead of talking past them or knocking down a weaker
-  version. This is the dialectical side of Wachsmuth's taxonomy (whether an
-  argument holds up against the real counterarguments), and it lines up with the
-  rules of critical discussion in pragma-dialectics (van Eemeren \& Grootendorst),
-  which say you have to address the actual standpoint. Not doing this is
-  straw-manning.
-  \item \emph{Constructive stance}: whether you critique the idea rather than
-  the person, grant fair points, and stay open to changing your mind. This maps
+  and represent it fairly. This is the dialectical side of Wachsmuth's taxonomy
+  (whether an argument holds up against the real counterarguments), and it lines up
+  with the rules of critical discussion in pragma-dialectics (van Eemeren \&
+  Grootendorst), which say you have to address the actual standpoint. Skipping this
+  is straw-manning.
+  \item \emph{Constructive stance}: whether you keep it about the idea, grant fair
+  points, and stay open to changing your mind. This maps
   onto two Discourse Quality Index codes: \emph{respect} (toward the other person
   and their argument) and \emph{constructive politics} (openness to build on or
   revise a position).
@@ -205,31 +200,28 @@ the bad behavior):
   \item \emph{Fallacies}: overgeneralizing, false cause, and exaggeration.
   These are failures of the same cogency criteria above, and they are classic
   informal fallacies (Walton, 1995). I focus on the four most common and
-  highest-impact ones I saw in the earlier game data (vague claims, over-broad
-  claims, causal leaps, and irrelevant responses) rather than rarer textbook
-  fallacies.
-  \item \emph{Evasion}: not acknowledging the other point and not even
-  attempting a counterargument. This is a relevance failure and the flip side of
-  engagement: you are supposed to defend the actual disagreement, not change the
-  subject.
-  \item \emph{Hostility}: attacking the person emotionally instead of the
-  argument, which is an ad hominem. This is the opposite of the Discourse Quality
-  Index's \emph{respect}, and it is a classic fallacy in its own right.
+  highest-impact ones I saw in the earlier game data: vague claims, over-broad
+  claims, causal leaps, and irrelevant responses.
+  \item \emph{Evasion}: dodging the other point without attempting a real
+  counterargument. This is a relevance failure and the flip side of engagement.
+  \item \emph{Hostility}: going after the person emotionally, which is an ad
+  hominem. This is the opposite of the Discourse Quality Index's \emph{respect},
+  and a classic fallacy in its own right.
 \end{itemize}
 
 The three helpful dimensions capture what good arguing adds; the three
 counterproductive ones capture what it should avoid. Splitting it this way (three
 prescriptive, three proscriptive, with overall $=$ helpful $-$ counterproductive)
 mirrors the paradigm we are replicating, and it lets the coaching push people
-toward the good moves and away from the bad ones rather than toward a single number.
+toward the good moves and away from the bad ones.
 
 \section{LLM-as-judge and validation}
 \label{sec:judge}
 
 Each round is scored by one call to the AI judge (\texttt{claude-sonnet-4-5}); the
 scoring prompt is in Appendix~\ref{sec:prompts}. Since the main result depends on
-this judge, I check that it scores well rather than assuming it does, following the
-evaluation approach of Kumar et al. (\emph{Nature Machine Intelligence}, 2025).
+this judge, I check that it scores well, following the evaluation approach of Kumar
+et al. (\emph{Nature Machine Intelligence}, 2025).
 
 To do that, a human expert (and ideally a second coder, to check they agree with
 each other) will hand-score a sample of about 20--30 rounds on the same rubric. I
