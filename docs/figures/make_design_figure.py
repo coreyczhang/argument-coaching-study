@@ -7,6 +7,7 @@ of arXiv:2603.15245). Renders a vector PDF + PNG for the Overleaf.
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+plt.rcParams["font.family"] = "serif"  # match the LaTeX body font
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 
 INK = "#2a2521"
@@ -46,7 +47,7 @@ box(7.0, 7.5, 3.6, 0.9, "TREATMENT (AICoach)\nthree rounds + between-round coach
 # the round loop (shared description under each)
 for cx, face in [(3.0, CTRL), (7.0, TREAT)]:
     box(cx, 6.05, 3.6, 1.15,
-        "Each round vs. good-faith\nLLM co-player:\nargue -> co-player replies ->\nrespond", face, "white", 8.6)
+        "Each round vs. a good-faith\nAI opponent:\nargue -> opponent replies ->\nrespond", face, "white", 8.6)
     arrow(cx, 7.05, cx, 6.65)
 
 # coach annotation on treatment
@@ -59,11 +60,11 @@ arrow(3.0, 5.45, 3.0, 4.98, color=CTRL)
 
 # rejoin -> scoring
 arrow(3.0, 4.15, 5, 3.55); arrow(7.0, 4.15, 5, 3.55)
-box(5, 3.1, 6.2, 0.95,
+box(5, 3.0, 6.8, 1.25,
     "LLM judge scores each round on 6 dimensions (1-5)\n"
-    "helpful: reasoning, engagement, constructive stance  |  "
-    "counterproductive: fallacies, evasion, hostility", LIGHT, INK, 8.4)
-arrow(5, 2.62, 5, 2.25)
+    "constructive: reasoning, engagement, constructive stance\n"
+    "counterproductive: fallacies, evasion, hostility", LIGHT, INK, 8.2)
+arrow(5, 2.37, 5, 2.18)
 box(5, 1.8, 5.4, 0.7, "Exit survey", SHARED, INK)
 arrow(5, 1.45, 5, 1.08)
 box(5, 0.62, 6.6, 0.8,
