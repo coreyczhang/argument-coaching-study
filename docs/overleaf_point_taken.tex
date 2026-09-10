@@ -27,7 +27,7 @@ This study tests whether tailored AI-generated coaching tips between rounds of d
 
 Online arguments deteriorate quickly. Much of that comes down to text itself. When people read an opposing view instead of hearing someone speak it, they rate the writer as less thoughtful and dismiss them more easily (Schroeder, Kardas, \& Epley, 2017). Without voice tone and facial cues, text-based arguments can quickly turn hostile.
 
-Structured debate games offer a practical way to counter this trend. In \emph{Point Taken}, players build, position, and revise arguments deliberately rather than firing off quick replies in an unmoderated thread. In an initial pilot ($N = 38$), this structured format helped participants better understand opposing stances, show more intellectual humility, and stay more open to learning compared to standard open-ended discussions (Elnakouri et al., 2025).
+Structured debate games offer a practical way to counter this trend. In \emph{Point Taken}, players build, position, and revise their arguments deliberately. A normal comment thread rewards fast replies. This format slows players down and makes them think. In an initial pilot ($N = 38$), this structured format helped participants better understand opposing stances, show more intellectual humility, and stay more open to learning compared to standard open-ended discussions (Elnakouri et al., 2025).
 
 Recent work also shows that deliberate practice paired with AI-driven feedback improves how people communicate. Kumar et al. (arXiv:2603.15245) demonstrated that people build better empathic communication skills when they practice with an AI partner and receive personalized guidance between attempts. We want to know whether that same approach can teach stronger argumentative reasoning. Building a sound argument relies on logic, structure, and evidence more than on emotional connection. Whether AI coaching can cultivate those specific skills is an open question.
 
@@ -48,11 +48,11 @@ We use a between-subjects design with two conditions. Participants enter the stu
   \item \textbf{Treatment group (AICoach).} Players complete the same three debate rounds but receive personalized coaching feedback between each round.
 \end{itemize}
 
-Both groups debate the same topics, face the same AI opponent, complete three rounds, and are graded with the same scoring rubric. The only difference is whether the participant sees the coaching interface between rounds. Each participant debates an AI partner, allowing us to collect data asynchronously without needing to pair participants in live lobbies. Each round focuses on a distinct topic and we randomize the topic order for every participant to prevent specific topics from confounding progress over rounds.
+Both groups debate the same topics, face the same AI opponent, complete three rounds, and are graded with the same scoring rubric. The only difference is whether the participant sees the coaching interface between rounds. Each participant debates an AI partner. This lets us collect data asynchronously and skip live matchmaking. Each round focuses on a distinct topic and we randomize the topic order for every participant to prevent specific topics from confounding progress over rounds.
 
 Participants remain in their assigned condition across all three rounds. We avoid a within-subjects design because coaching effects would easily bleed into uncoached rounds and that could obscure what a genuine baseline looks like. Keeping participants in separate groups protects the integrity of our control condition.
 
-We prompt the AI opponent to argue strictly in good faith. Our goal is to measure how well someone constructs sound arguments against a fair partner. If the AI resorted to personal attacks or straw men, we would instead be testing whether participants can tolerate and respond to bad-faith tactics, which is an entirely different empirical question.
+We prompt the AI opponent to argue strictly in good faith. Our goal is to measure how well someone constructs sound arguments against a fair partner. If the AI used personal attacks or straw men, we would be testing something different. We would be measuring whether participants can handle bad-faith tactics. That is a separate question.
 
 \section{Procedure: rounds and interaction requirements}
 \label{sec:procedure}
@@ -88,8 +88,8 @@ Our rubric balances what strong reasoning requires with what it must avoid. Ever
 Constructive dimensions (shown to treatment participants):
 \begin{itemize}[nosep]
   \item \emph{Reasoning quality.} Evaluates whether claims are supported by concrete reasons, examples, or evidence, and whether conclusions follow logically from premises. Strong reasoning relies on verifiable facts; weak reasoning leans on unsupported opinion. This maps directly onto the \emph{cogency} criteria from Wachsmuth et al. (2017), which require claims to be acceptable, relevant, and sufficient. It also reflects the \emph{justification} requirement in the Discourse Quality Index (Steenbergen et al., 2003).
-  \item \emph{Engagement.} Evaluates whether the participant tackles the opponent's core points directly and represents them fairly. This addresses the dialectical requirement in Wachsmuth's framework and reflects the critical discussion rules in pragma-dialectics (van Eemeren \& Grootendorst, 2004), which require interlocutors to address the opposing standpoint directly rather than attacking a caricature.
-  \item \emph{Constructive stance.} Evaluates whether the participant focuses on the ideas rather than attacking the person, concedes valid counterarguments, and shows openness to nuance. This draws from two key criteria in the Discourse Quality Index: \emph{respect} toward opponents and their ideas, and \emph{constructive politics}, which captures an openness to finding common ground.
+  \item \emph{Engagement.} Evaluates whether the participant tackles the opponent's core points directly and represents them fairly. This addresses the dialectical requirement in Wachsmuth's framework and reflects the critical discussion rules in pragma-dialectics (van Eemeren \& Grootendorst, 2004). Those rules require you to engage the real standpoint. Attacking a weakened version breaks them.
+  \item \emph{Constructive stance.} Evaluates whether the participant keeps the focus on the ideas, concedes valid counterarguments, and stays open to nuance. This draws from two key criteria in the Discourse Quality Index: \emph{respect} toward opponents and their ideas, and \emph{constructive politics}, which captures an openness to finding common ground.
 \end{itemize}
 
 Counterproductive dimensions (scored internally for analysis, where higher values indicate more frequent flaws):
@@ -163,7 +163,7 @@ The following prompts run verbatim in the production environment.
 
 \subsection{Round evaluation prompt}
 
-Every dimension includes concrete anchors at 1, 3, and 5. The judge must ground every score in direct quotations from the participant's text. The reasoning anchors assess acceptability, relevance, and sufficiency (Wachsmuth et al., 2017), while the constructive stance and hostility anchors adapt the respect and openness criteria from the Discourse Quality Index (Steenbergen et al., 2003).
+Every dimension includes concrete anchors at 1, 3, and 5. The judge must ground every score in direct quotations from the participant's text. The reasoning anchors assess acceptability, relevance, and sufficiency (Wachsmuth et al., 2017). The constructive stance and hostility anchors adapt the respect and openness criteria from the Discourse Quality Index (Steenbergen et al., 2003).
 
 \begin{Verbatim}[fontsize=\small]
 You are an expert annotator scoring how well a participant argued in one
@@ -260,14 +260,14 @@ Within each round, participants in the treatment condition also receive real-tim
 
 Our primary feedback rules focus on four common flaws: lacking detail (\emph{Needs more detail}), overgeneralizing (\emph{Too broad}), assuming causality without proof (\emph{Causal leap}), and talking past the opponent (\emph{Needs clearer connection}). Less common flaws like anecdotal generalizations, appeals to authority, and whataboutism remain flagged in our backend logs for exploratory research, since short argument tiles rarely contain enough text to detect them reliably.
 
-The feedback engine runs through four steps: it analyzes the tile in context, flags target reasoning errors, checks whether the error is severe enough to justify interrupting the player, and suggests a short explanation with an optional rewrite. Any suggested rewrite must preserve the participant's original stance, ensuring the tool helps players express their own ideas more effectively rather than putting words in their mouth.
+The feedback engine runs through four steps: it analyzes the tile in context, flags target reasoning errors, checks whether the error is severe enough to justify interrupting the player, and suggests a short explanation with an optional rewrite. Any suggested rewrite keeps the participant's original stance. The tool sharpens the player's own idea. It never puts words in their mouth.
 
 \section{Open parameters}
 \label{sec:open}
 
 \begin{enumerate}[nosep]
   \item The minimum number of turns required per round and how strictly the system verifies direct replies to the debate partner (Section~\ref{sec:procedure}).
-  \item Final calibration of rubric anchors across all six dimensions, particularly constructive stance, where we want to ensure players must actively build on ideas rather than simply avoid insults to earn top marks.
+  \item Final calibration of rubric anchors across all six dimensions, particularly constructive stance. We want top marks to require building on ideas. Just avoiding insults should not be enough.
   \item The composition of our human validation team (evaluating whether one expert rater is sufficient or if two independent coders are required to benchmark inter-rater reliability).
   \item The final choice of evaluation model. While earlier validation studies tested Gemini 2.5 Pro and Claude 3.7 Sonnet, our current implementation uses Claude Sonnet 4.5.
 \end{enumerate}
