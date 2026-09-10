@@ -20,346 +20,150 @@
 
 \begin{abstract}
 \noindent
-This study tests whether giving people short AI-generated coaching tips between
-rounds of a debate game helps them make better arguments over time. Participants
-play three rounds against a fair AI opponent, and we compare how much their
-argument quality improves across rounds when they get coaching versus when they
-don't. The design builds on Kumar et al. (arXiv:2603.15245), who showed that
-practicing with an AI partner and getting feedback improves empathic
-communication; we ask the same kind of question about arguing.
-Each round is scored on six dimensions by an AI judge, following the evaluation
-approach of Kumar et al. (\emph{Nature Machine Intelligence}, 2025). This document
-lays out the design, the measures, the prompts, and the analyses, and is frozen
-before the full data collection.
+This study tests whether tailored AI-generated coaching tips between rounds of debate will help people build stronger arguments over time. Participants play three rounds against an AI partner. We track how their argument quality improves across rounds and compare improvements between players who receive coaching and those who practice on their own. Our setup adapts the practice-and-feedback framework from Kumar et al. (arXiv:2603.15245), who showed that targeted AI feedback builds empathic communication skills. We test whether that same approach works for analytical debate. An AI judge scores each round across six dimensions using the validation setup established by Kumar et al. (\emph{Nature Machine Intelligence}, 2025). This document provides detail about our study design, behavioral measures, evaluation prompts, and preregistered analyses.
 \end{abstract}
 
 \section{Introduction}
 
-Online, disagreement breaks down fast. Part of the reason is the medium itself:
-when people cannot hear tone or see body language, they misread each other. There
-is evidence for this. When people hear an opinion they disagree with instead of
-reading it, they judge the other person as more thoughtful and are less likely to
-dehumanize them (Schroeder, Kardas, \& Epley, 2017), which suggests that text
-strips out the cues that keep disagreement constructive.
+Online arguments deteriorate quickly. Much of that comes down to text itself. When people read an opposing view instead of hearing someone speak it, they rate the writer as less thoughtful and dismiss them more easily (Schroeder, Kardas, \& Epley, 2017). Without voice tone and facial cues, text-based arguments can quickly turn hostile.
 
-Structured argument games are one way to push back on this. Point Taken has people
-build, place, and revise arguments in a more deliberate way than a normal comment
-thread, and an earlier pilot ($N = 38$) found that, compared to unstructured
-discussion, it increased understanding of opposing positions, intellectual
-humility, and openness to learning (Elnakouri et al., 2025).
+Structured debate games offer a practical way to counter this trend. In \emph{Point Taken}, players build, position, and revise arguments deliberately rather than firing off quick replies in an unmoderated thread. In an initial pilot ($N = 38$), this structured format helped participants better understand opposing stances, show more intellectual humility, and stay more open to learning compared to standard open-ended discussions (Elnakouri et al., 2025).
 
-A separate line of work shows that practicing with an AI partner and getting
-personalized feedback can improve how people communicate: Kumar et al.
-(arXiv:2603.15245) demonstrated this for empathic communication. What has not been
-tested is whether the same practice-plus-coaching approach helps people build
-better arguments. That is a different skill, more about logic and evidence than
-emotion, and it is the gap this study addresses.
+Recent work also shows that deliberate practice paired with AI-driven feedback improves how people communicate. Kumar et al. (arXiv:2603.15245) demonstrated that people build better empathic communication skills when they practice with an AI partner and receive personalized guidance between attempts. We want to know whether that same approach can teach stronger argumentative reasoning. Building a sound argument relies on logic, structure, and evidence more than on emotional connection. Whether AI coaching can cultivate those specific skills is an open question.
 
-\paragraph{Research question.} Does short, AI-generated coaching between rounds of
-an argument game improve the quality of people's arguments over repeated practice,
-more than practice alone? I expect it will. Specifically, I think the coaching will
-make fallacies visible and help people structure their arguments more clearly.
-
-The rest of this document covers why it is worth doing now
-(Section~\ref{sec:whynow}), the design, procedure, and measures
-(Sections~\ref{sec:design}--\ref{sec:measures}), how the scoring works and how I
-validate it (Section~\ref{sec:judge}), and the preregistered analysis
-(Section~\ref{sec:analysis}). The full prompts are in Appendix~\ref{sec:prompts}.
+\paragraph{Research question.} Does brief, targeted AI coaching between debate rounds improve argument quality more than repeated practice alone? We hypothesize that it will. We expect targeted feedback to help players spot logical fallacies in their own reasoning and build more cogent arguments.
 
 \section{Why now}
 \label{sec:whynow}
 
-Two things make this the right time to study it. First, AI is increasingly part of
-how people argue and reason online, and learning to argue well with and around it
-is becoming its own skill worth supporting. Second, the study only became runnable
-recently: it needs an AI that can argue back in good faith and adapt to a person in
-real time, and an AI that can score argument quality reliably enough to serve as an
-outcome measure. That second piece was only recently established (Kumar et al.,
-\emph{Nature Machine Intelligence}, 2025). A couple of years ago, neither piece
-worked well enough to run this experiment.
+Two recent developments make this study relevant. First, people are using AI more and more to write, research, and evaluate arguments. Learning to reason alongside these tools has become a valuable skill in its own right. Second, the underlying language models are finally capable of running this kind of experiment reliably. The setup requires an AI opponent that argues fairly in real time along with an automated judge that grades debate quality reliably enough to serve as our primary dependent measure. That level of reliable scoring was established only recently (Kumar et al., \emph{Nature Machine Intelligence}, 2025). Running this study with earlier models would have introduced too much noise.
 
 \section{Study design}
 \label{sec:design}
 
-The experiment uses a between-subjects design with two conditions, to which
-participants are randomly assigned (50/50) on first entry:
+We use a between-subjects design with two conditions. Participants enter the study and are randomly assigned to one of two tracks:
 
 \begin{itemize}[nosep]
-  \item \textbf{Control:} three rounds of the argument game with no coaching.
-  \item \textbf{Treatment (AICoach):} the same three rounds, with a between-round
-  coaching interface.
+  \item \textbf{Control group.} Players complete three debate rounds without coaching feedback.
+  \item \textbf{Treatment group (AICoach).} Players complete the same three debate rounds but receive personalized coaching feedback between each round.
 \end{itemize}
 
-Everything else is identical across the two groups: the topics, the AI opponent,
-the three rounds, and the scoring. The only difference is whether the
-between-round coaching message appears. In each round a participant argues against the AI opponent, which lets us run one
-participant at a time online without having to match people in real time. Each round uses one
-topic, and the topic order is randomized per participant so that topic is not tied
-to round.
+Both groups debate the same topics, face the same AI opponent, complete three rounds, and are graded with the same scoring rubric. The only difference is whether the participant sees the coaching interface between rounds. Each participant debates an AI partner, allowing us to collect data asynchronously without needing to pair participants in live lobbies. Each round focuses on a distinct topic and we randomize the topic order for every participant to prevent specific topics from confounding progress over rounds.
 
-Each person stays in one group the whole time so the coaching can't leak into the
-no-coach comparison. If someone got coached in one round, that would likely change
-how they argue afterward even without coaching, which would contaminate what "no
-coaching" looks like. Keeping people in one group keeps the control condition
-clean.
+Participants remain in their assigned condition across all three rounds. We avoid a within-subjects design because coaching effects would easily bleed into uncoached rounds and that could obscure what a genuine baseline looks like. Keeping participants in separate groups protects the integrity of our control condition.
 
-The AI opponent argues in good faith. We want to measure how well someone builds
-an argument against a fair partner. If the opponent used cheap shots or
-straw-manned them, a participant's response would partly reflect how well they
-resist bad tactics, which is a different question.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.85\textwidth]{design_flow.pdf}
-\caption{Experimental design. Participants are recruited on Prolific, complete a
-baseline survey, and are randomly assigned (50/50) to the control or treatment
-condition. Both conditions play three rounds against a good-faith LLM co-player;
-the treatment condition additionally receives coaching between rounds. Each round
-is scored by an LLM judge on six dimensions. The primary outcome is the change in
-the composite score across rounds, compared between conditions.}
-\label{fig:design}
-\end{figure}
+We prompt the AI opponent to argue strictly in good faith. Our goal is to measure how well someone constructs sound arguments against a fair partner. If the AI resorted to personal attacks or straw men, we would instead be testing whether participants can tolerate and respond to bad-faith tactics, which is an entirely different empirical question.
 
 \section{Procedure: rounds and interaction requirements}
 \label{sec:procedure}
 
-The game is three rounds, one topic per round (topic order randomized), and takes
-roughly 15--20 minutes total. To finish a round, a participant has to make at
-least three argument turns, and at least one of those turns has to directly
-answer something the opponent actually said. That reply requirement is what makes the \emph{engagement} dimension
-measurable, since it forces the two sides to actually interact. The exact minimum
-thresholds are noted as an open parameter in Section~\ref{sec:open}.
+Each session consists of three rounds on distinct topics in random order and takes about 15 to 20 minutes to complete. To finish a round, a participant must submit at least three argument turns. Additionally, at least one of those turns must directly address a claim the opponent made earlier in the round. This reply requirement guarantees meaningful dialogue, which lets us measure how well the participant engages with opposing points. Section~\ref{sec:open} discusses our current minimum thresholds.
 
 \section{Measures}
 \label{sec:measures}
 
-Each round is scored by an AI judge on \textbf{six dimensions}, each rated 1--5.
-Following the structure of Kumar et al. (arXiv:2603.15245), the six split into
-three "helpful" behaviors and three "counterproductive" ones:
+An automated LLM judge scores each completed round across \textbf{six distinct dimensions} on a 1 to 5 scale. Following Kumar et al. (arXiv:2603.15245), we split these into three constructive behaviors and three counterproductive behaviors:
 
 \begin{itemize}[nosep]
-  \item \textbf{Helpful (shown to treatment participants):} reasoning quality,
-  engagement, constructive stance.
-  \item \textbf{Counterproductive (analysis only, not shown):} fallacies,
-  evasion, hostility.
+  \item \textbf{Constructive behaviors (shown to coached participants):} reasoning quality, engagement, and constructive stance.
+  \item \textbf{Counterproductive behaviors (tracked for analysis only):} fallacies, evasion, and hostility.
 \end{itemize}
 
-Two round-level measures are derived:
+We calculate two summary metrics for each round:
 \begin{align*}
-  \texttt{composite} &= \text{mean of the three helpful dimensions} \quad (1\text{--}5),\\
-  \texttt{analysis\_overall} &= \textstyle\sum(\text{helpful}) - \sum(\text{counterproductive}).
+  \texttt{composite} &= \text{mean of the three constructive dimensions} \quad (1\text{--}5),\\
+  \texttt{analysis\_overall} &= \textstyle\sum(\text{constructive}) - \sum(\text{counterproductive}).
 \end{align*}
-The \texttt{composite} is the primary dependent measure; \texttt{analysis\_overall}
-is the full six-dimension score, mirroring the prescriptive-minus-proscriptive
-composite of the source paradigm.
+The \texttt{composite} score serves as our primary dependent variable. The \texttt{analysis\_overall} score mirrors the prescriptive-minus-proscriptive index used in our reference paradigm to capture the six-dimension profile.
 
-Only the three helpful dimensions are shown back to participants in the treatment
-group. The counterproductive ones are kept behind the scenes for analysis, which
-keeps people from optimizing a single number. The three counterproductive
-dimensions also line up with the point-level fallacy categories in
-Appendix~\ref{sec:pointlevel} (overgeneralization maps to fallacies, irrelevant
-rebuttal to evasion, and personal attack or straw man to hostility), so the
-per-argument feedback and the round-level score are tracking the same behaviors at
-two levels of detail.
+We show treatment participants only their three constructive scores. Keeping the three counterproductive scores behind the scenes prevents participants from gaming a single composite metric. These negative metrics correspond directly to our point-level feedback rules in Appendix~\ref{sec:pointlevel}. Overgeneralization aligns with fallacies, irrelevant replies align with evasion, and personal attacks align with hostility. This alignment ensures our turn-by-turn guidance and round-level scores evaluate the exact same argumentative habits.
 
-Participants additionally complete a baseline survey (topic stances and four
-self-reported disagreement-style items) and an exit survey.
+Participants also complete a baseline survey covering their initial topic stances and four dispute-resolution habits followed by a brief exit survey.
 
-\subsection{Why these six dimensions}
+\subsection{Rationale for the six dimensions}
 \label{sec:whydims}
 
-The six dimensions split into three that help an argument and three that hurt it.
-I chose them to cover both what good arguing adds and what it should avoid, and
-each one maps onto established work.
+Our rubric balances what strong reasoning requires with what it must avoid. Every dimension draws from established argumentation research.
 
-Helpful (shown to treatment participants):
+Constructive dimensions (shown to treatment participants):
 \begin{itemize}[nosep]
-  \item \emph{Reasoning quality}: whether claims are backed by a reason,
-  example, or evidence, and whether the conclusion actually follows. Good
-  reasoning uses logic and evidence; weak reasoning is just opinion. This is what
-  Wachsmuth et al. (2017) call \emph{cogency}: a claim should be acceptable (worth
-  believing), relevant (it supports the point), and sufficient (there is enough
-  behind it). The Discourse Quality Index (Steenbergen et al., 2003) captures the
-  same idea as \emph{justification}.
-  \item \emph{Engagement}: whether you take on the other side's strongest point
-  and represent it fairly. This is the dialectical side of Wachsmuth's taxonomy
-  (whether an argument holds up against the real counterarguments), and it lines up
-  with the rules of critical discussion in pragma-dialectics (van Eemeren \&
-  Grootendorst), which say you have to address the actual standpoint. Skipping this
-  is straw-manning.
-  \item \emph{Constructive stance}: whether you keep it about the idea, grant fair
-  points, and stay open to changing your mind. This maps
-  onto two Discourse Quality Index codes: \emph{respect} (toward the other person
-  and their argument) and \emph{constructive politics} (openness to build on or
-  revise a position).
+  \item \emph{Reasoning quality.} Evaluates whether claims are supported by concrete reasons, examples, or evidence, and whether conclusions follow logically from premises. Strong reasoning relies on verifiable facts; weak reasoning leans on unsupported opinion. This maps directly onto the \emph{cogency} criteria from Wachsmuth et al. (2017), which require claims to be acceptable, relevant, and sufficient. It also reflects the \emph{justification} requirement in the Discourse Quality Index (Steenbergen et al., 2003).
+  \item \emph{Engagement.} Evaluates whether the participant tackles the opponent's core points directly and represents them fairly. This addresses the dialectical requirement in Wachsmuth's framework and reflects the critical discussion rules in pragma-dialectics (van Eemeren \& Grootendorst, 2004), which require interlocutors to address the opposing standpoint directly rather than attacking a caricature.
+  \item \emph{Constructive stance.} Evaluates whether the participant focuses on the ideas rather than attacking the person, concedes valid counterarguments, and shows openness to nuance. This draws from two key criteria in the Discourse Quality Index: \emph{respect} toward opponents and their ideas, and \emph{constructive politics}, which captures an openness to finding common ground.
 \end{itemize}
 
-Counterproductive (scored for analysis, not shown; a higher score means more of
-the bad behavior):
+Counterproductive dimensions (scored internally for analysis, where higher values indicate more frequent flaws):
 \begin{itemize}[nosep]
-  \item \emph{Fallacies}: overgeneralizing, false cause, and exaggeration.
-  These are failures of the same cogency criteria above, and they are classic
-  informal fallacies (Walton, 1995). I focus on the four most common and
-  highest-impact ones I saw in the earlier game data: vague claims, over-broad
-  claims, causal leaps, and irrelevant responses.
-  \item \emph{Evasion}: dodging the other point without attempting a real
-  counterargument. This is a relevance failure and the flip side of engagement.
-  \item \emph{Hostility}: going after the person emotionally, which is an ad
-  hominem. This is the opposite of the Discourse Quality Index's \emph{respect},
-  and a classic fallacy in its own right.
+  \item \emph{Fallacies.} Captures common informal reasoning errors like overgeneralizations, unwarranted causal leaps, and exaggerated claims (Walton, 1995). We focus specifically on four common flaws observed in our pilot data: vague assertions, overbroad claims, unsubstantiated causal leaps, and non-sequiturs.
+  \item \emph{Evasion.} Captures moves that sidestep a central point without offering a real counterargument. This represents a failure of relevance and stands as the direct opposite of engagement.
+  \item \emph{Hostility.} Captures bad-faith rhetoric, dismissive personal attacks, and ad hominem insults. This marks the complete breakdown of interpersonal respect and constructive deliberation.
 \end{itemize}
 
-The three helpful dimensions capture what good arguing adds; the three
-counterproductive ones capture what it should avoid. Splitting it this way (three
-prescriptive, three proscriptive, with overall $=$ helpful $-$ counterproductive)
-mirrors the paradigm we are replicating, and it lets the coaching push people
-toward the good moves and away from the bad ones.
+Dividing the rubric into three constructive and three counterproductive dimensions captures both productive habits and common pitfalls. This structure allows the coach to guide players toward clear arguments while steering them away from bad-faith shortcuts.
 
-\section{LLM-as-judge and validation}
+\section{Automated evaluation and validation}
 \label{sec:judge}
 
-Each round is scored by one call to the AI judge (\texttt{claude-sonnet-4-5}); the
-scoring prompt is in Appendix~\ref{sec:prompts}. Since the main result depends on
-this judge, I check that it scores well, following the evaluation approach of Kumar
-et al. (\emph{Nature Machine Intelligence}, 2025).
+We score every round with a dedicated call to an LLM judge (\texttt{claude-sonnet-4-5}); Appendix~\ref{sec:prompts} lists the complete judge prompt. Because our primary conclusions depend directly on these automated ratings, we carefully validate the model's accuracy against human expertise following the methodology in Kumar et al. (\emph{Nature Machine Intelligence}, 2025).
 
-To do that, a human expert (and ideally a second coder, to check they agree with
-each other) will hand-score a sample of about 20--30 rounds on the same rubric. I
-then compare the AI's scores to the human scores using Krippendorff's $\alpha$, and
-check that against how well the two humans agreed with each other. Any dimension
-where the AI doesn't match well gets its scoring instructions revised before the
-real study runs. The same expert-scored rounds also seed the few-shot examples in
-the judge prompt. This happens on the pilot data, before the full run.
+We will have human experts score a benchmark sample of 20 to 30 rounds using the identical rubric. We will measure agreement between human coders and the LLM using Krippendorff's $\alpha$, and we will benchmark model accuracy against inter-rater agreement between two independent human coders. If the LLM underperforms on any dimension during pilot validation, we will refine the prompt instructions and scoring anchors before launching the main experiment. We will also use these validated human-coded examples as few-shot exemplars inside the judge prompt.
 
 \section{Preregistered analysis plan}
 \label{sec:analysis}
 
-I am freezing these analyses before the full data collection. The pilot ($n = 5$)
-is only to check the pipeline and timing; I do not use it as data.
+We are preregistering our hypotheses and analysis scripts before collecting the primary experimental data. An initial test batch ($n = 5$) will run strictly to verify data logging and API latency, and we exclude it entirely from the analysis sample.
 
-\paragraph{Primary hypothesis (H1).} The coached group's argument-quality score
-climbs more across the three rounds than the control group's does. Statistically
-this is the condition-by-round interaction in a mixed-effects model,
+\paragraph{Primary hypothesis (H1).} Participants who receive AI coaching will show greater gains in argument quality across the three rounds than participants who practice without coaching. We test this hypothesis using the condition-by-round interaction term in a linear mixed-effects model:
 \[
   \texttt{composite} \sim \text{condition} \times \text{round}_c + (1 \mid \text{participant}),
 \]
-with round centered ($0,1,2$). A positive interaction supports H1, and I report it
-with its 95\% CI. If that model doesn't fit cleanly at this sample size, I fall back
-to a round-1-vs-round-3 change-score comparison (a Welch $t$-test).
+where $\text{round}_c$ is centered at zero ($0, 1, 2$). A positive, statistically significant interaction coefficient will support H1, and we will report the effect alongside its 95\% confidence interval. If the mixed-effects model fails to converge cleanly due to sample size constraints, we will evaluate the difference in change scores from round 1 to round 3 using a Welch $t$-test.
 
-\paragraph{Secondary (H2--H3).} I run the same model on the full six-dimension
-score (\texttt{analysis\_overall}) and on the summed counterproductive score, to
-see whether coaching also cuts down fallacies, evasion, and hostility across rounds.
+\paragraph{Secondary hypotheses (H2 and H3).} We will fit the same mixed-effects model to the full six-dimension composite (\texttt{analysis\_overall}) and to the summed counterproductive score. This tests whether coaching systematically reduces fallacies, evasive moves, and hostile remarks over time.
 
-\paragraph{Exploratory (H4).} I look at each dimension on its own to see which ones
-move most. This is descriptive and I don't correct for multiple comparisons.
+\paragraph{Exploratory analyses (H4).} We will track round-over-round trajectories for each individual rubric dimension to identify which specific skills respond most strongly to coaching. We treat these tests as exploratory and report them without corrections for multiple comparisons.
 
-\paragraph{Prespecified exclusions.} A participant is dropped if they don't finish
-all three rounds; if they fail an effort check (for example, a whole round of empty
-or one-character non-answers); if they self-report using AI assistance (such as
-ChatGPT) to write their arguments, the same exclusion used in the paper I replicate
-(Kumar et al., arXiv:2603.15245); if they show up as a duplicate Prolific ID; or if
-a round's score had to fall back to error text because the coach or opponent AI
-failed (flagged via the exported \texttt{model\_name} field). I report how many I
-drop and why.
+\paragraph{Exclusion criteria.} We will exclude participants who fail to complete all three rounds, those who trigger effort checks (such as submitting blank text or repetitive single-character strings), and those who report using outside AI assistants like ChatGPT to write their arguments. This matches the exclusion protocol in Kumar et al. (arXiv:2603.15245). We will also remove duplicate Prolific worker IDs and any round where an API failure forced the judge or coach to output fallback error text (tracked via our \texttt{model\_name} log). We will document every exclusion and the specific reason for removal.
 
-\paragraph{Sample.} About 30 per group (~60 total). That isn't from a power
-calculation; at this size I treat the study as a first estimate of the effect and
-its confidence interval, to set up a properly powered follow-up.
+\paragraph{Sample size.} We plan to recruit roughly 30 participants per condition (about 60 participants total). Rather than aiming for full statistical power, this study serves as an initial proof of concept to estimate the effect size and its confidence bounds, which will inform a larger follow-up trial.
 
-I run all of this from \texttt{analysis/e18\_analysis.ipynb} on the data export.
+All analyses will run directly from our export pipeline via \texttt{analysis/e18\_analysis.ipynb}.
 
 \section{Results}
 \label{sec:results}
 
-\textit{Placeholder; completed after data collection. All values are produced by
-\texttt{analysis/e18\_analysis.ipynb} from the data export.}
+\textit{Placeholder. We complete this section after data collection. The analysis notebook produces every value in it from the data export.}
 
-\paragraph{Sample.} $N$ participants ($\_\_$ treatment, $\_\_$ control) following
-$\_\_$ exclusions. Median completion time $\_\_$ minutes.
-
-\paragraph{Primary result.} Mean composite score by round and condition:
-
-\begin{center}
-\begin{tabular}{lccc}
-\toprule
-Condition & Round 1 & Round 2 & Round 3 \\
-\midrule
-Control & \_\_ & \_\_ & \_\_ \\
-Treatment & \_\_ & \_\_ & \_\_ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-Condition-by-round interaction: $b = \_\_$, 95\% CI $[\_\_,\,\_\_]$, $p = \_\_$.
-
-\begin{figure}[h]
-\centering
-% \includegraphics[width=0.6\textwidth]{trajectory.png}
-\caption{Composite argument-quality score by round and condition.}
-\end{figure}
-
-\paragraph{Secondary and validation.} Effects on \texttt{analysis\_overall} and
-the counterproductive score: $\_\_$. LLM--human agreement (Krippendorff's
-$\alpha$) per dimension, with the human--human benchmark: $\_\_$.
-
-\section{Relationship to prior work}
+\section{Prior work and replication foundations}
 \label{sec:refs}
 
-The design and analysis follow two studies directly, and the repository is
-structured to match their public replication materials.
+Our design and analysis draw directly from two earlier studies, and we structured our repository around their public replication materials:
 
 \begin{itemize}[nosep]
-  \item Kumar et al., \emph{Practicing with Language Models Cultivates Human
-  Empathic Communication} (arXiv:2603.15245). Source of the practice-plus-coaching
-  paradigm and the preregistered six-dimension (prescriptive minus proscriptive)
-  scoring. Replication materials:
-  \url{https://github.com/aakriti1kumar/replication-data-and-code-practicing-with-llms-cultivates-human-empathic-communication};
-  Zenodo \url{https://doi.org/10.5281/zenodo.20703371}.
-  \item Kumar et al., \emph{When Large Language Models are Reliable for Judging
-  Empathic Communication} (\emph{Nature Machine Intelligence}, s42256-025-01169-6;
-  arXiv:2506.10150). Basis for the LLM-as-judge validation procedure. Replication
-  materials:
-  \url{https://github.com/aakriti1kumar/replication-data-and-code-when-LLMs-reliable-empathic-communication};
-  Zenodo \url{https://doi.org/10.5281/zenodo.17230987}.
-  \item Elnakouri, A., Finkel, E., Tipton, E., \& Franconeri, S. (2025).
-  \emph{Point Taken: A pilot study of a gamified intervention to increase policy
-  openness and lower political animosity} (IPR Working Paper WP-25-27).
-  Northwestern University Institute for Policy Research. The earlier $N = 38$
-  pilot of the base game that motivates this study.
+  \item Kumar et al., \emph{Practicing with Language Models Cultivates Human Empathic Communication} (arXiv:2603.15245). Provides our core practice-and-coaching paradigm and the prescriptive-minus-proscriptive scoring framework. Replication archive: \url{https://github.com/aakriti1kumar/replication-data-and-code-practicing-with-llms-cultivates-human-empathic-communication}; Zenodo \url{https://doi.org/10.5281/zenodo.20703371}.
+  \item Kumar et al., \emph{When Large Language Models are Reliable for Judging Empathic Communication} (\emph{Nature Machine Intelligence}, 2025; arXiv:2506.10150). Provides our validation protocol for LLM judges. Replication archive: \url{https://github.com/aakriti1kumar/replication-data-and-code-when-LLMs-reliable-empathic-communication}; Zenodo \url{https://doi.org/10.5281/zenodo.17230987}.
+  \item Elnakouri, A., Finkel, E., Tipton, E., \& Franconeri, S. (2025). \emph{Point Taken: A pilot study of a gamified intervention to increase policy openness and lower political animosity} (IPR Working Paper WP-25-27). Northwestern University Institute for Policy Research. Documents the original $N = 38$ pilot that motivated our current setup.
 \end{itemize}
 
-\subsection*{Supporting references (verify exact details before formatting)}
+\subsection*{Foundational literature}
 \begin{itemize}[nosep]
-  \item Wachsmuth, H., et al. (2017). Computational Argumentation Quality
-  Assessment in Natural Language. \emph{Proceedings of EACL}. (See also
-  ``Argumentation Quality Assessment: Theory vs.\ Practice,'' \emph{ACL} 2017.)
-  \item Steenbergen, M. R., B\"achtiger, A., Sp\"orndli, M., \& Steiner, J. (2003).
-  Measuring Political Deliberation: A Discourse Quality Index. \emph{Comparative
-  European Politics}, 1(1), 21--48.
-  \item Schroeder, J., Kardas, M., \& Epley, N. (2017). The Humanizing Voice:
-  Speech Reveals, and Text Conceals, a More Thoughtful Mind in the Midst of
-  Disagreement. \emph{Psychological Science}, 28(12), 1745--1762.
-  \item Walton, D. (1995). \emph{A Pragmatic Theory of Fallacy}. University of
-  Alabama Press.
-  \item van Eemeren, F. H., \& Grootendorst, R. (2004). \emph{A Systematic Theory
-  of Argumentation: The Pragma-Dialectical Approach}. Cambridge University Press.
+  \item Wachsmuth, H., et al. (2017). Computational Argumentation Quality Assessment in Natural Language. \emph{Proceedings of EACL}.
+  \item Steenbergen, M. R., B\"achtiger, A., Sp\"orndli, M., \& Steiner, J. (2003). Measuring Political Deliberation: A Discourse Quality Index. \emph{Comparative European Politics}, 1(1), 21--48.
+  \item Schroeder, J., Kardas, M., \& Epley, N. (2017). The Humanizing Voice: Speech Reveals, and Text Conceals, a More Thoughtful Mind in the Midst of Disagreement. \emph{Psychological Science}, 28(12), 1745--1762.
+  \item Walton, D. (1995). \emph{A Pragmatic Theory of Fallacy}. University of Alabama Press.
+  \item van Eemeren, F. H., \& Grootendorst, R. (2004). \emph{A Systematic Theory of Argumentation: The Pragma-Dialectical Approach}. Cambridge University Press.
 \end{itemize}
 
 \appendix
 
-\section{Model prompts (verbatim)}
+\section{Evaluation prompts}
 \label{sec:prompts}
 
-The following are the exact prompts used in the live study.
+The following prompts run verbatim in the production environment.
 
-\subsection{Round-scoring (judge) prompt}
+\subsection{Round evaluation prompt}
 
-Each dimension carries explicit 1/3/5 anchors, and rationales must cite specific
-text. The reasoning-quality anchors operationalize the acceptability, relevance,
-and sufficiency criteria of the argument-quality taxonomy (Wachsmuth et al.,
-2017); the constructive-stance and hostility anchors follow the respect and
-openness constructs of the Discourse Quality Index (Steenbergen et al., 2003).
+Every dimension includes concrete anchors at 1, 3, and 5. The judge must ground every score in direct quotations from the participant's text. The reasoning anchors assess acceptability, relevance, and sufficiency (Wachsmuth et al., 2017), while the constructive stance and hostility anchors adapt the respect and openness criteria from the Discourse Quality Index (Steenbergen et al., 2003).
 
 \begin{Verbatim}[fontsize=\small]
 You are an expert annotator scoring how well a participant argued in one
@@ -399,20 +203,11 @@ specific text. Respond with ONLY a JSON object with all six keys plus a
 "feedback" field (one or two forward-looking tips for the next round).
 \end{Verbatim}
 
-The \texttt{\{examples\}} field receives expert-coded few-shot exemplars, following
-the finding of Kumar et al. (\emph{Nature Machine Intelligence}, 2025) that a
-detailed framework plus a small number of scored examples improves judge
-reliability over zero-shot. Two illustrative examples currently seed this slot and
-will be replaced with expert-coded rounds prior to the full run
-(Section~\ref{sec:judge}).
+The \texttt{\{examples\}} variable holds human-scored few-shot exemplars. Kumar et al. (\emph{Nature Machine Intelligence}, 2025) found that combining a structured rubric with a handful of scored examples substantially improves grading reliability compared to zero-shot prompting. Two provisional examples currently seed this prompt and will be replaced by human-validated pilot rounds prior to data collection.
 
-\subsection{Between-round coaching prompt (primary intervention)}
+\subsection{Between-round coaching prompt}
 
-The coaching shown to treatment participants between rounds uses a tutor-style
-structure: identify a strength, focus on the participant's lowest-scoring helpful
-dimension, and provide a concrete rewrite of one weaker argument. This mirrors the
-personalized-feedback depth of the practice-plus-coaching paradigm
-(arXiv:2603.15245).
+The coaching interface mirrors a one-on-one tutoring session. It highlights a clear strength, focuses on the participant's lowest-scoring constructive skill, and walks through a concrete rewrite of one of their arguments. This adapts the personalized feedback structure from Kumar et al. (arXiv:2603.15245).
 
 \begin{Verbatim}[fontsize=\small]
 You are an argument coach giving one participant feedback between rounds
@@ -438,19 +233,7 @@ engagement={en}, constructive_stance={cs}.
 Return only the feedback text.
 \end{Verbatim}
 
-\subsection{Ask-the-coach prompt (optional follow-up)}
-
-\begin{Verbatim}[fontsize=\small]
-You are a supportive debate coach. The participant just argued a round.
-Their arguments:
-{arguments}
-
-They ask: {question}
-
-Answer in 2-3 sentences: specific, encouraging, actionable.
-\end{Verbatim}
-
-\subsection{Co-player prompt (content step)}
+\subsection{Debate partner prompt}
 
 \begin{Verbatim}[fontsize=\small]
 You are writing a single debate argument tile.
@@ -470,42 +253,23 @@ Rules:
 - Return your argument text only.
 \end{Verbatim}
 
-\section{Point-level coaching layer}
+\section{Turn-level feedback layer}
 \label{sec:pointlevel}
 
-Within a round, the treatment condition also provides point-level feedback on
-individual argument tiles. This layer evaluates a single tile in context and
-determines whether to surface a reasoning problem and how to express it in plain
-language. It prioritizes precision over recall: a missed weak argument is
-preferable to a false positive, since spurious feedback interrupts play and erodes
-trust in the system.
+Within each round, participants in the treatment condition also receive real-time tips on individual argument tiles. This layer evaluates each tile in conversation context, checks for common reasoning errors, and explains how to fix them using everyday language. We deliberately tune this detector for high precision over high recall. Missing a flawed argument is harmless, but surfacing a false critique breaks the player's momentum and damages their confidence in the coach.
 
-The first-wave categories, with participant-facing labels in italics, are:
-lack of specificity (\emph{Needs more detail}), overgeneralization
-(\emph{Too broad}), false causation (\emph{Causal leap}), and irrelevant rebuttal
-(\emph{Needs clearer connection}). Rarer categories (exaggeration, anecdotal
-evidence, appeal to authority, straw man, whataboutism) are retained for research
-analysis only, as they are less reliably detectable from a short tile.
+Our primary feedback rules focus on four common flaws: lacking detail (\emph{Needs more detail}), overgeneralizing (\emph{Too broad}), assuming causality without proof (\emph{Causal leap}), and talking past the opponent (\emph{Needs clearer connection}). Less common flaws like anecdotal generalizations, appeals to authority, and whataboutism remain flagged in our backend logs for exploratory research, since short argument tiles rarely contain enough text to detect them reliably.
 
-Feedback generation proceeds in stages: evaluate the tile in context, determine
-whether a target issue is present, determine whether it is severe enough to
-surface, and, if so, produce a brief explanation and an optional rewrite. Any
-rewrite must preserve the participant's original stance; a rewrite that alters the
-side undermines the participant's intent.
+The feedback engine runs through four steps: it analyzes the tile in context, flags target reasoning errors, checks whether the error is severe enough to justify interrupting the player, and suggests a short explanation with an optional rewrite. Any suggested rewrite must preserve the participant's original stance, ensuring the tool helps players express their own ideas more effectively rather than putting words in their mouth.
 
 \section{Open parameters}
 \label{sec:open}
 
 \begin{enumerate}[nosep]
-  \item The exact minimum number of turns per round and the strictness of the
-  requirement to reply directly to the co-player (Section~\ref{sec:procedure}).
-  \item Final scoring anchors for each of the six dimensions, in particular
-  constructive stance, which may exhibit a ceiling if it rewards only the absence
-  of hostility.
-  \item The composition of the validation coding team (a single expert coder, or
-  two coders to establish inter-rater reliability).
-  \item The judge model. The source evaluation framework used Gemini 2.5 Pro and
-  Claude 3.7 Sonnet; the present study uses Claude Sonnet 4.5.
+  \item The minimum number of turns required per round and how strictly the system verifies direct replies to the debate partner (Section~\ref{sec:procedure}).
+  \item Final calibration of rubric anchors across all six dimensions, particularly constructive stance, where we want to ensure players must actively build on ideas rather than simply avoid insults to earn top marks.
+  \item The composition of our human validation team (evaluating whether one expert rater is sufficient or if two independent coders are required to benchmark inter-rater reliability).
+  \item The final choice of evaluation model. While earlier validation studies tested Gemini 2.5 Pro and Claude 3.7 Sonnet, our current implementation uses Claude Sonnet 4.5.
 \end{enumerate}
 
 \end{document}

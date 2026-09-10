@@ -1,92 +1,90 @@
-# AsPredicted Pre-Registration: Point Taken (Argument Coaching)
+# AsPredicted Pre-Registration for Point Taken (Argument Coaching)
 
-Paste into a Google Doc. Wording is drawn from your own answers; read it through
-and adjust anything before submitting so it's fully yours.
+Paste this into a Google Doc. Read it through and adjust anything so it is fully
+yours.
 
-**Study type:** Experiment
-**Authors:** Corey Zhang, Aakriti Kumar, Steven Franconeri
+**Study type.** Experiment
+
+**Authors.** Corey Zhang, Aakriti Kumar, Steven Franconeri
 
 ---
 
 **1) Has data collection begun for this study?**
 
-No. Only a small pilot (n = 5) has run, and that was solely to test that the game
-and scoring pipeline work, and it is not used as data in the actual analysis. Real
-data collection has not started.
+No. We have not collected any data for the main analysis. We ran a small pilot with
+five people to check that the game and the scoring pipeline work. We do not use that
+pilot as data.
 
-**2) What's the main question being asked or hypothesis being tested?**
+**2) What is the main question being asked or hypothesis being tested?**
 
-Whether giving people short AI-generated coaching tips between rounds of a debate
-game helps them make better arguments over time. The hypothesis is that the coached
-group's argument quality will improve more across the three rounds than the control
-group's.
+We ask whether short, AI-generated coaching between rounds helps people build better
+arguments over time. We predict that the coached group improves its argument quality
+across the three rounds more than the control group does.
 
-**3) Describe the key dependent variable(s) and how they will be measured.**
+**3) Describe the key dependent variable and how it will be measured.**
 
-The main dependent variable is a composite argument-quality score for each round:
-the mean of three "helpful" dimensions (reasoning quality, engagement, constructive
-stance), each rated 1–5 by an AI judge. A secondary measure is the full six-
-dimension score (the three helpful dimensions minus three counterproductive ones:
-fallacies, evasion, hostility).
-
-The dimensions are not ad hoc. Reasoning quality follows the "cogency" criteria
-(acceptability, relevance, sufficiency of claims) in Wachsmuth et al.'s (2017)
-argument-quality taxonomy; engagement follows its dialectical criterion (addressing
-the real counterargument) and the pragma-dialectical rule of addressing the actual
-standpoint (van Eemeren & Grootendorst); constructive stance follows the respect
-and constructive-politics codes of the Discourse Quality Index (Steenbergen et al.,
-2003). The counterproductive dimensions are the inverses: fallacies (Walton, 1995),
-evasion (a relevance failure), and hostility (ad hominem / DQI disrespect). The
-three-helpful/three-counterproductive split mirrors the preregistered structure of
-the paradigm being replicated (Kumar et al., arXiv:2603.15245).
+Our main dependent variable is a composite argument-quality score for each round. It
+is the mean of three constructive dimensions. These dimensions are reasoning quality,
+engagement, and constructive stance. An AI judge rates each dimension from 1 to 5. We
+also track a secondary score called analysis_overall. It adds the three constructive
+dimensions and subtracts the three counterproductive ones, which are fallacies,
+evasion, and hostility. Each dimension draws on established argumentation research.
+Reasoning quality follows the cogency criteria in Wachsmuth et al. (2017). Engagement
+follows the pragma-dialectical rule of addressing the real standpoint (van Eemeren
+and Grootendorst, 2004). Constructive stance follows the respect and
+constructive-politics codes in the Discourse Quality Index (Steenbergen et al.,
+2003). The counterproductive dimensions cover common fallacies (Walton, 1995),
+evasion, and hostility.
 
 **4) How many and which conditions will participants be assigned to?**
 
-Two, assigned between subjects and randomized 50/50: Control (the game with no
-coaching) and Treatment / "AICoach" (the same game, with personalized coaching
-between each round). Everything else is identical: the topics, the AI opponent, the
-three rounds, and the scoring. The only difference is whether the between-round
-coaching message appears.
+We use two conditions in a between-subjects design. We randomly assign each
+participant to one condition when they enter, with a 50/50 split. The control group
+plays three rounds with no coaching. The treatment group, which we call AICoach,
+plays the same three rounds and receives personalized coaching between each round.
+The topics, the AI opponent, the three rounds, and the scoring stay the same across
+both groups. The only difference is whether the coaching appears.
 
 **5) Specify exactly which analyses you will conduct.**
 
-Whether the coached group's score climbs more across the three rounds than the
-control group's does. This is the condition-by-round interaction, which follows the primary
-analysis in the paper we replicate (Kumar et al., arXiv:2603.15245), which used a
-condition-by-round interaction with standard errors clustered at the participant
-level. I fit this as a mixed-effects model, composite ~ condition * round +
-(1 | participant); a linear regression with participant-clustered standard errors
-is the equivalent. If that model does not fit cleanly at this sample size, the
-backup is a round-1-vs-round-3 change-score comparison (a Welch two-sample t-test).
+We test whether the coached group improves across rounds more than the control group
+does. This is the condition-by-round interaction. We follow the primary analysis in
+Kumar et al. (arXiv:2603.15245), who used a condition-by-round interaction with
+standard errors clustered at the participant level. We fit a linear mixed-effects
+model, composite ~ condition * round + (1 | participant). A positive interaction
+supports our hypothesis. If that model does not fit cleanly at our sample size, we
+compare the round 1 to round 3 change scores with a Welch t-test.
 
-**6) Describe exactly how outliers/exclusions will be handled.**
+**6) Describe exactly how outliers will be handled and your rules for excluding
+observations.**
 
-A participant is excluded if they: don't finish all three rounds; fail an effort
-check (for example, a whole round of empty or one-character non-answers);
-self-report having used AI assistance (e.g., ChatGPT) to write their arguments
-(the same exclusion used in Kumar et al., arXiv:2603.15245); show up as a duplicate
-Prolific ID; or have a round whose score had to fall back to error text because the
-coach or opponent AI failed.
+We exclude a participant who does not finish all three rounds. We exclude anyone who
+fails an effort check, such as submitting blank or single-character answers for a
+whole round. We exclude anyone who reports using an outside AI tool such as ChatGPT
+to write their arguments. This matches the exclusion protocol in Kumar et al.
+(arXiv:2603.15245). We also remove duplicate Prolific IDs. We remove any round where
+an API failure forced the judge or coach to output fallback text. We record every
+exclusion and the reason for it.
 
-**7) How many observations will be collected / what determines sample size?**
+**7) How many observations will be collected or what will determine sample size?**
 
-About 30 participants per group (~60 total) for the full run. This is not from a
-formal power calculation; at this scale the study is treated as a first estimate of
-the effect size (with its confidence interval), which would inform a properly
-powered follow-up.
+We plan to recruit about 30 participants per condition, or about 60 total. This is
+not a power-calculated number. We treat this study as a first estimate of the effect
+size and its confidence interval. That estimate will inform a larger follow-up study.
 
 **8) Anything else you would like to pre-register?**
 
-Secondary and exploratory analyses: the same test on the full six-dimension score
-and on the counterproductive dimensions (does coaching reduce fallacies, evasion,
-and hostility), and per-dimension trajectories (exploratory, not corrected for
-multiple comparisons). Separately, the AI judge is validated against human coding
-(Krippendorff's alpha vs. an expert coder) before the full run; the judge is
-currently zero-shot and few-shot examples may be added from the expert-coded
-rounds.
+We will run the same model on the full six-dimension score and on the summed
+counterproductive score. This tests whether coaching reduces fallacies, evasion, and
+hostility over time. We will track each dimension on its own as an exploratory
+analysis. We will not correct these exploratory tests for multiple comparisons. We
+validate the AI judge against human coding before the full run. We measure agreement
+with Krippendorff's alpha and benchmark it against agreement between two human
+coders. The judge currently runs zero-shot. We may add human-scored examples as
+few-shot exemplars before the full run.
 
 **9) Title.**
 
-Point Taken: An Argument-Coaching Study. (Alternative, more descriptive: "Does
-Between-Round AI Coaching Improve Argument Quality Over Repeated Practice? A
-Between-Subjects Study.")
+Point Taken, An Argument-Coaching Study. A more descriptive option is Does
+Between-Round AI Coaching Improve Argument Quality Over Repeated Practice, a
+Between-Subjects Study.
